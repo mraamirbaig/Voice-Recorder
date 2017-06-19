@@ -33,7 +33,6 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         setUpRecorder()
-        setUpPlayer()
     }
     
     func setUpRecorder(){
@@ -61,7 +60,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             
             soundPlayer.delegate = self
             soundPlayer.prepareToPlay()
-            soundPlayer.volume = 10.0
+            soundPlayer.volume = 1.0
         } catch {
             print("Something went wrong while settingup player.")
         }
@@ -71,7 +70,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         
         let path  = getCacheDirectory()
         let filePath = URL(fileURLWithPath: path).appendingPathComponent(fileName)
-        
+        print("Path..\(path)")
         return filePath
     }
     
@@ -106,6 +105,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     @IBAction func playBtnAction(_ sender: Any) {
         
         if playBtn.title(for: .normal) == PLAY_BTN_TITLE.PLAY{
+            setUpPlayer()
             startPlaying()
         }else{
             stopPlaying()
