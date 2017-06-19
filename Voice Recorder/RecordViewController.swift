@@ -19,12 +19,12 @@ struct PLAY_BTN_TITLE {
     static let STOP = "Stop"
 }
 
-class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
 
     var soundRecorder : AVAudioRecorder!
     var soundPlayer : AVAudioPlayer!
     
-    var fileName = "demo.caf"
+    var fileName: String?
     
     @IBOutlet weak var recordAndStopBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
@@ -45,7 +45,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             AVSampleRateKey : 44100.0
         ] as [String : Any]
         do {
-            try soundRecorder = AVAudioRecorder.init(url: getFileURL(), settings: recordSettings)
+            let newDateTimeFileName = getNewDateTimeFileName()
+            try soundRecorder = AVAudioRecorder.init(url: getFileURLWithFileName(newDateTimeFileName), settings: recordSettings)
+            fileName = newDateTimeFileName
             soundRecorder.delegate = self
             soundRecorder.prepareToRecord()
         } catch {
@@ -53,33 +55,37 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         }
     }
     
+    func getNewDateTimeFileName() -> String {
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        return formatter.string(from: Date()) + ".caf"
+    }
+    
     func setUpPlayer(){
         
         do {
-            try soundPlayer = AVAudioPlayer(contentsOf: getFileURL())
+            try soundPlayer = AVAudioPlayer(contentsOf: getFileURLWithFileName(fileName!))
             
             soundPlayer.delegate = self
             soundPlayer.prepareToPlay()
             soundPlayer.volume = 1.0
         } catch {
+            
             print("Something went wrong while settingup player.")
         }
     }
     
-    private func getFileURL() -> URL{
+    private func getFileURLWithFileName(_ fileName: String) -> URL{
         
-        let path  = getCacheDirectory()
-        let filePath = URL(fileURLWithPath: path).appendingPathComponent(fileName)
-        print("Path..\(path)")
-        return filePath
-    }
-    
-    private func getCacheDirectory() -> String {
+        let fileManager = FileManager.default
+        let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentDirectory = urls[0] as NSURL
+        let fileURL = documentDirectory.appendingPathComponent(fileName)
+        print(fileURL!)
+        return fileURL!
         
-        //let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-        let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory,.userDomainMask, true) as [String]
-        
-        return paths[0]
     }
     
     @IBAction func recordAndStopBtnAction(_ sender: Any) {
@@ -130,17 +136,26 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         playBtn.isEnabled = true
     }
     
+    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
+        print("Error while recording audio \(String(describing: error?.localizedDescription))")
+    }
+    
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         recordAndStopBtn.isEnabled = true
         playBtn.setTitle(PLAY_BTN_TITLE.PLAY, for: .normal)
     }
     
-    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        print("Error while recording audio \(String(describing: error?.localizedDescription))")
-    }
-    
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         print("Error while playing audio \(String(describing: error?.localizedDescription))")
+    }
+    
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let effectsViewController = segue.destination as? EffectsViewController {
+            
+            
+        }
     }
 }
 
