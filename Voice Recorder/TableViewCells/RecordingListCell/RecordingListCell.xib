@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecordingListCellIdentifier" id="Xq2-fW-WqE" customClass="RecordingListCell" customModule="Voice_Recorder" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xq2-fW-WqE" id="WjA-u2-kMY">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19t-UW-adZ">
+                        <rect key="frame" x="8" y="8" width="127.5" height="27.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EGq-w2-JkN">
+                        <rect key="frame" x="339.5" y="8" width="27.5" height="27.5"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="EGq-w2-JkN" secondAttribute="height" multiplier="1:1" id="kAq-Z2-CPX"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="19t-UW-adZ" secondAttribute="bottom" id="Nsv-ff-3oB"/>
+                    <constraint firstAttribute="trailing" secondItem="EGq-w2-JkN" secondAttribute="trailing" constant="8" id="NwG-rZ-niM"/>
+                    <constraint firstItem="EGq-w2-JkN" firstAttribute="top" secondItem="WjA-u2-kMY" secondAttribute="top" constant="8" id="aSN-5q-69Q"/>
+                    <constraint firstItem="19t-UW-adZ" firstAttribute="leading" secondItem="WjA-u2-kMY" secondAttribute="leadingMargin" id="imQ-sI-Y5v"/>
+                    <constraint firstAttribute="bottom" secondItem="EGq-w2-JkN" secondAttribute="bottom" constant="8" id="oEF-NU-jJ7"/>
+                    <constraint firstItem="EGq-w2-JkN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="19t-UW-adZ" secondAttribute="trailing" constant="8" id="tXb-cV-tXz"/>
+                    <constraint firstItem="19t-UW-adZ" firstAttribute="top" secondItem="WjA-u2-kMY" secondAttribute="topMargin" id="uxJ-hh-YB2"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="recordingNameLbl" destination="19t-UW-adZ" id="ojh-jB-fdF"/>
+                <outlet property="stopImgView" destination="EGq-w2-JkN" id="qXL-7R-zho"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

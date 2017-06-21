@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
+class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
 
     @IBOutlet weak var recordingsListTableView: UITableView!
     
@@ -19,10 +19,14 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     let documentsDirectoryService = DocumentsDirectoryService()
     var showAlertService: ShowAlertService!
     
+    var indexPathOfPlayingCell: IndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        recordingsListTableView.register(UINib.init(nibName: "RecordingListCell", bundle: Bundle.init(for: RecordingListCell.self)), forCellReuseIdentifier: "RecordingListCellIdentifier")
         
         showAlertService = ShowAlertService.init(onViewController: self)
         if let recordingListNames = getRecordingListNames() {
@@ -48,28 +52,62 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
         
-        if cell == nil {
-            cell = UITableViewCell.init(style: .default, reuseIdentifier: "Cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RecordingListCellIdentifier", for: indexPath) as! RecordingListCell
+        cell.recordingNameLbl.text = recordingsListNames[indexPath.row]
+        
+        if indexPathOfPlayingCell != nil {
+            if indexPathOfPlayingCell == indexPath {
+                cell.stopImgView.isHidden = false
+            }else{
+                cell.stopImgView.isHidden = true
+            }
+        }else{
+            cell.stopImgView.isHidden = true
         }
         
-        cell?.textLabel?.text = recordingsListNames[indexPath.row]
-        return cell!
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        playRecordingWithFileName(recordingsListNames[indexPath.row])
+        tableView.deselectRow(at: indexPath, animated: false)
+        
+        if indexPathOfPlayingCell == nil {
+            setCellAsIsStopped(false, atIndexPath: indexPath)
+            playRecordingAtIndexPath(indexPath)
+        }else{
+            if indexPathOfPlayingCell == indexPath {
+                stopPlayer()
+            }else{
+                stopPlayer()
+                playRecordingAtIndexPath(indexPath)
+            }
+            
+        }
     }
     
-    func playRecordingWithFileName(_ fileName: String) {
-        
+    func playRecordingAtIndexPath(_ indexPath: IndexPath) {
+         
+        let fileName = recordingsListNames[indexPath.row]
         if setUpPlayerWithFileName(fileName) {
+            indexPathOfPlayingCell = indexPath
+            setCellAsIsStopped(false, atIndexPath: indexPath)
             soundPlayer.play()
         }else{
             showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
+        }
+    }
+    
+    func stopPlayer() {
+        if indexPathOfPlayingCell != nil {
+            
+            setCellAsIsStopped(true, atIndexPath: indexPathOfPlayingCell!)
+            indexPathOfPlayingCell = nil
+            
+            if soundPlayer.isPlaying {
+                soundPlayer.stop()
+            }
         }
     }
     
@@ -78,7 +116,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         do {
             try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.getFileURLWithFileName(fileName))
             
-            //soundPlayer.delegate = self
+            soundPlayer.delegate = self
             soundPlayer.prepareToPlay()
             soundPlayer.volume = 1.0
             return true
@@ -87,6 +125,26 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
             print("Something went wrong while settingup player.")
             return false
         }
+    }
+    
+    func setCellAsIsStopped(_ isStopped: Bool, atIndexPath indexPath: IndexPath)  {
+        
+        let cell = recordingsListTableView.cellForRow(at: indexPath) as! RecordingListCell
+        cell.stopImgView.isHidden = isStopped
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        stopPlayer()
+    }
+    
+    func audioPlayerBeginInterruption(_ player: AVAudioPlayer) {
+        
+    }
+    func audioPlayerEndInterruption(_ player: AVAudioPlayer, withOptions flags: Int) {
+        
+    }
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        
     }
      
     /*

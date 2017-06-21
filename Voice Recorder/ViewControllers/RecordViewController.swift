@@ -120,7 +120,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         do {
             try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.getFileURLWithFileName(fileName))
             
-            //soundPlayer.delegate = self
+            soundPlayer.delegate = self
             soundPlayer.prepareToPlay()
             soundPlayer.volume = 1.0
             return true

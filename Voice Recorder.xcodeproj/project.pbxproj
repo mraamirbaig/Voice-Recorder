@@ -13,6 +13,8 @@
 		6119E5051EFAEFF5001B4E86 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119E5011EFAEFF5001B4E86 /* RecordViewController.swift */; };
 		6119E50C1EFAF041001B4E86 /* ShowAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119E50B1EFAF041001B4E86 /* ShowAlertService.swift */; };
 		6119E50E1EFAF0BA001B4E86 /* DocumentsDirectoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119E50D1EFAF0BA001B4E86 /* DocumentsDirectoryService.swift */; };
+		6119E5151EFB0C71001B4E86 /* RecordingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6119E5131EFB0C71001B4E86 /* RecordingListCell.swift */; };
+		6119E5161EFB0C71001B4E86 /* RecordingListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6119E5141EFB0C71001B4E86 /* RecordingListCell.xib */; };
 		614B2D351EF6FF9C006922E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614B2D341EF6FF9C006922E4 /* AppDelegate.swift */; };
 		614B2D3C1EF6FF9C006922E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 614B2D3B1EF6FF9C006922E4 /* Assets.xcassets */; };
 		614B2D3F1EF6FF9C006922E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 614B2D3D1EF6FF9C006922E4 /* LaunchScreen.storyboard */; };
@@ -44,6 +46,8 @@
 		6119E5011EFAEFF5001B4E86 /* RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		6119E50B1EFAF041001B4E86 /* ShowAlertService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowAlertService.swift; sourceTree = "<group>"; };
 		6119E50D1EFAF0BA001B4E86 /* DocumentsDirectoryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentsDirectoryService.swift; sourceTree = "<group>"; };
+		6119E5131EFB0C71001B4E86 /* RecordingListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingListCell.swift; sourceTree = "<group>"; };
+		6119E5141EFB0C71001B4E86 /* RecordingListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordingListCell.xib; sourceTree = "<group>"; };
 		614B2D311EF6FF9C006922E4 /* Voice Recorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Voice Recorder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		614B2D341EF6FF9C006922E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		614B2D3B1EF6FF9C006922E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -93,9 +97,9 @@
 		6119E4FE1EFAEFF5001B4E86 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				6119E5011EFAEFF5001B4E86 /* RecordViewController.swift */,
 				6119E4FF1EFAEFF5001B4E86 /* EffectsViewController.swift */,
 				6119E5001EFAEFF5001B4E86 /* RecordingsListViewController.swift */,
-				6119E5011EFAEFF5001B4E86 /* RecordViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -107,6 +111,23 @@
 				6119E50D1EFAF0BA001B4E86 /* DocumentsDirectoryService.swift */,
 			);
 			path = ServiceClasses;
+			sourceTree = "<group>";
+		};
+		6119E50F1EFB0526001B4E86 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				6119E5101EFB0541001B4E86 /* RecordingListCell */,
+			);
+			path = TableViewCells;
+			sourceTree = "<group>";
+		};
+		6119E5101EFB0541001B4E86 /* RecordingListCell */ = {
+			isa = PBXGroup;
+			children = (
+				6119E5131EFB0C71001B4E86 /* RecordingListCell.swift */,
+				6119E5141EFB0C71001B4E86 /* RecordingListCell.xib */,
+			);
+			path = RecordingListCell;
 			sourceTree = "<group>";
 		};
 		614B2D281EF6FF9C006922E4 = {
@@ -136,6 +157,7 @@
 				6119E5061EFAF017001B4E86 /* ServiceClasses */,
 				6119E4FE1EFAEFF5001B4E86 /* ViewControllers */,
 				6119E4FC1EFAEFF5001B4E86 /* Storyboards */,
+				6119E50F1EFB0526001B4E86 /* TableViewCells */,
 				614B2D3B1EF6FF9C006922E4 /* Assets.xcassets */,
 				614B2D3D1EF6FF9C006922E4 /* LaunchScreen.storyboard */,
 				614B2D401EF6FF9C006922E4 /* Info.plist */,
@@ -274,6 +296,7 @@
 				6119E5021EFAEFF5001B4E86 /* Main.storyboard in Resources */,
 				614B2D3F1EF6FF9C006922E4 /* LaunchScreen.storyboard in Resources */,
 				614B2D3C1EF6FF9C006922E4 /* Assets.xcassets in Resources */,
+				6119E5161EFB0C71001B4E86 /* RecordingListCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +323,7 @@
 			files = (
 				6119E5041EFAEFF5001B4E86 /* RecordingsListViewController.swift in Sources */,
 				614B2D351EF6FF9C006922E4 /* AppDelegate.swift in Sources */,
+				6119E5151EFB0C71001B4E86 /* RecordingListCell.swift in Sources */,
 				6119E5031EFAEFF5001B4E86 /* EffectsViewController.swift in Sources */,
 				6119E50C1EFAF041001B4E86 /* ShowAlertService.swift in Sources */,
 				6119E50E1EFAF0BA001B4E86 /* DocumentsDirectoryService.swift in Sources */,
