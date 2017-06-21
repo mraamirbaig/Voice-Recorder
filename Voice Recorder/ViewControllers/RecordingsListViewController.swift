@@ -146,6 +146,12 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        stopPlayer()
+    }
      
     /*
     // MARK: - Navigation

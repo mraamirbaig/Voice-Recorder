@@ -10,10 +10,13 @@ import UIKit
 
 class EffectsViewController: UIViewController {
 
+    var fileName: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        print("Selected file name is \(fileName)")
     }
 
     override func didReceiveMemoryWarning() {

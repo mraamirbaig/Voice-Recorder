@@ -20,7 +20,7 @@ struct PLAY_BTN_TITLE {
 }
 
 class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
-
+    
     var soundRecorder : AVAudioRecorder!
     var soundPlayer : AVAudioPlayer!
     var fileName: String?
@@ -28,6 +28,8 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     let documentsDirectoryService = DocumentsDirectoryService()
     var showAlertService: ShowAlertService!
     
+    
+    @IBOutlet weak var addEffectsNavBarItem: UIBarButtonItem!
     @IBOutlet weak var recordAndStopBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     
@@ -42,7 +44,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         if recordAndStopBtn.title(for: .normal) == RECORD_BTN_TITLE.RECORD{
             let newDateTimeFileName = getNewDateTimeFileName()
             if setUpRecorderWithFileName(newDateTimeFileName) {
-                 fileName = newDateTimeFileName
+                fileName = newDateTimeFileName
                 startRecording()
             }else{
                 showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to to setup recorder. Please try again.", actionTitle: "Ok")
@@ -69,7 +71,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
             soundRecorder.prepareToRecord()
             return true
         } catch {
-                print("Something went wrong while setting up recorder.")
+            print("Something went wrong while setting up recorder.")
             return false
         }
     }
@@ -91,7 +93,10 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     
     private func stopRecording() {
         
-        soundRecorder.stop()
+        if soundRecorder != nil {
+            addEffectsNavBarItem.isEnabled = true
+            soundRecorder.stop()
+        }
     }
     
     @IBAction func playBtnAction(_ sender: Any) {
@@ -99,7 +104,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
             if playBtn.title(for: .normal) == PLAY_BTN_TITLE.PLAY{
                 playRecordingWithFileName(fileName!)
             }else{
-                stopPlaying()
+                stopPlayer()
             }
         }else {
             showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "There is no recent recording to play. Please record and try again.", actionTitle: "Ok")
@@ -109,7 +114,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     func playRecordingWithFileName(_ fileName: String) {
         
         if setUpPlayerWithFileName(fileName) {
-            startPlaying()
+            startPlayer()
         }else{
             showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
         }
@@ -131,17 +136,23 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         }
     }
     
-    private func startPlaying() {
+    private func startPlayer() {
         
         recordAndStopBtn.isEnabled = false
         playBtn.setTitle(PLAY_BTN_TITLE.STOP, for: .normal)
         soundPlayer.play()
-
+        
     }
     
-    private func stopPlaying() {
+    private func stopPlayer() {
         
-        soundPlayer.stop()
+        recordAndStopBtn.isEnabled = true
+        playBtn.setTitle(PLAY_BTN_TITLE.PLAY, for: .normal)
+        if soundPlayer != nil {
+            if soundPlayer.isPlaying == true {
+                soundPlayer.stop()
+            }
+        }
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
@@ -154,21 +165,45 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        recordAndStopBtn.isEnabled = true
-        playBtn.setTitle(PLAY_BTN_TITLE.PLAY, for: .normal)
+        
+        stopPlayer()
     }
     
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         print("Error while playing audio \(String(describing: error?.localizedDescription))")
     }
     
+    @IBAction func addEffectsNavBarItemAction(_ sender: Any) {
+        
+    }
     
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let effectsViewController = segue.destination as? EffectsViewController {
-//            
-//            
-//        }
-//    }
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        stopRecording()
+        stopPlayer()
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+    
+        if identifier == "EffectsViewControllerSegue" {
+            if fileName != nil {
+                return true
+            }else{
+                showAlertService.showAlertWithAlertTitle(title: "No recording found", alertMessage: "Please record and then add effects to it.", actionTitle: "Ok")
+                return false
+            }
+        }
+        return true
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let effectsViewController = segue.destination as? EffectsViewController {
+            effectsViewController.fileName = fileName!
+        }
+    }
+    
 }
 
