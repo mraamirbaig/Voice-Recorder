@@ -10,9 +10,10 @@ import UIKit
 import AVFoundation
 
 class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
-
+    
     @IBOutlet weak var recordingsListTableView: UITableView!
     
+    let audioSession = AVAudioSession.sharedInstance()
     var soundPlayer : AVAudioPlayer!
     var recordingsListNames = [String]()
     
@@ -23,7 +24,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         
         recordingsListTableView.register(UINib.init(nibName: "RecordingListCell", bundle: Bundle.init(for: RecordingListCell.self)), forCellReuseIdentifier: "RecordingListCellIdentifier")
@@ -31,7 +32,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         showAlertService = ShowAlertService.init(onViewController: self)
         if let recordingListNames = getRecordingListNames() {
             recordingsListNames = recordingListNames
-        } 
+        }
     }
     
     func getRecordingListNames() -> [String]? {
@@ -46,7 +47,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
             recordingsListTableView.reloadData()
         }
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recordingsListNames.count
     }
@@ -88,7 +89,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     }
     
     func playRecordingAtIndexPath(_ indexPath: IndexPath) {
-         
+        
         let fileName = recordingsListNames[indexPath.row]
         if setUpPlayerWithFileName(fileName) {
             indexPathOfPlayingCell = indexPath
@@ -97,6 +98,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         }else{
             showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
         }
+        
     }
     
     func stopPlayer() {
@@ -112,17 +114,25 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     }
     
     func setUpPlayerWithFileName(_ fileName: String) -> Bool{
-        
         do {
-            try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.getFileURLWithFileName(fileName))
-            
-            soundPlayer.delegate = self
-            soundPlayer.prepareToPlay()
-            soundPlayer.volume = 1.0
-            return true
-        } catch {
-            
-            print("Something went wrong while settingup player.")
+            try audioSession.setCategory(
+                AVAudioSessionCategoryPlayback)
+            do {
+                try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.getFileURLWithFileName(fileName))
+                
+                soundPlayer.delegate = self
+                soundPlayer.prepareToPlay()
+                soundPlayer.volume = 1.0
+                return true
+            } catch {
+                
+                showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
+                return false
+            }
+        }
+        catch let error as NSError {
+            print("audioSession error: \(error.localizedDescription)")
+            showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
             return false
         }
     }
@@ -152,15 +162,15 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         super.viewWillDisappear(animated)
         stopPlayer()
     }
-     
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

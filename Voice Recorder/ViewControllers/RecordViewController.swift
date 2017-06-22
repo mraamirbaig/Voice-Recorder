@@ -21,6 +21,7 @@ struct PLAY_BTN_TITLE {
 
 class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
+    let audioSession = AVAudioSession.sharedInstance()
     var soundRecorder : AVAudioRecorder!
     var soundPlayer : AVAudioPlayer!
     var fileName: String?
@@ -56,24 +57,30 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     
     func setUpRecorderWithFileName(_ fileName: String)-> Bool{
         
-        let recordSettings = [
-            AVFormatIDKey: kAudioFormatAppleLossless,
-            AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
-            AVEncoderBitRateKey : 320000,
-            AVNumberOfChannelsKey: 2,
-            AVSampleRateKey : 44100.0
-            ] as [String : Any]
         do {
+            try audioSession.setCategory(
+                AVAudioSessionCategoryRecord)
             
-            try soundRecorder = AVAudioRecorder.init(url: documentsDirectoryService.getFileURLWithFileName(fileName), settings: recordSettings)
-            
-            soundRecorder.delegate = self
-            soundRecorder.prepareToRecord()
-            return true
-        } catch {
-            print("Something went wrong while setting up recorder.")
+            let recordSettings = [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
+                                  AVEncoderBitRateKey: 16,
+                                  AVNumberOfChannelsKey: 2,
+                                  AVSampleRateKey: 44100.0] as [String : Any]
+            do {
+                
+                try soundRecorder = AVAudioRecorder.init(url: documentsDirectoryService.getFileURLWithFileName(fileName), settings: recordSettings)
+                
+                soundRecorder.delegate = self
+                soundRecorder.prepareToRecord()
+                return true
+            } catch {
+                print("Something went wrong while setting up recorder.")
+                return false
+            }
+        } catch let error as NSError {
+            print("audioSession error: \(error.localizedDescription)")
             return false
         }
+        
     }
     
     func getNewDateTimeFileName() -> String {
@@ -113,9 +120,18 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     
     func playRecordingWithFileName(_ fileName: String) {
         
-        if setUpPlayerWithFileName(fileName) {
-            startPlayer()
-        }else{
+        do {
+            try audioSession.setCategory(
+                AVAudioSessionCategoryPlayback)
+            
+            if setUpPlayerWithFileName(fileName) {
+                startPlayer()
+            }else{
+                showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
+            }
+        }
+        catch let error as NSError {
+            print("audioSession error: \(error.localizedDescription)")
             showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
         }
     }
@@ -186,7 +202,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-    
+        
         if identifier == "EffectsViewControllerSegue" {
             if fileName != nil {
                 return true
