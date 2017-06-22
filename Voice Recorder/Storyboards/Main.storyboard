@@ -6,10 +6,12 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Record View Controller-->
+        <!--Record-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="RecordViewController" customModule="Voice_Recorder" customModuleProvider="target" sceneMemberID="viewController">
@@ -60,7 +62,7 @@
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hhH-6J-TBU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="C1b-Vg-LeO">
+                    <navigationItem key="navigationItem" title="Record" id="C1b-Vg-LeO">
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Add Effects" id="FZo-Uj-EgE">
                             <connections>
                                 <action selector="addEffectsNavBarItemAction:" destination="BYZ-38-t0r" id="cjG-iu-OTh"/>
@@ -76,9 +78,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1127" y="777"/>
+            <point key="canvasLocation" x="1182" y="620"/>
         </scene>
-        <!--Effects View Controller-->
+        <!--Add Effects-->
         <scene sceneID="Pmf-Mj-tQk">
             <objects>
                 <viewController id="eDW-BS-27P" customClass="EffectsViewController" customModule="Voice_Recorder" customModuleProvider="target" sceneMemberID="viewController">
@@ -89,20 +91,62 @@
                     <view key="view" contentMode="scaleToFill" id="pxc-f3-bhx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i7K-Ur-EHp">
+                                <rect key="frame" x="14" y="318" width="347" height="31"/>
+                                <connections>
+                                    <action selector="echoSliderValueChanged:" destination="eDW-BS-27P" eventType="valueChanged" id="3Ho-Pz-mac"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Echo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4R-r0-qev">
+                                <rect key="frame" x="168" y="356" width="39" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="centerY" secondItem="pxc-f3-bhx" secondAttribute="centerY" id="2YO-89-lbP"/>
+                            <constraint firstItem="H4R-r0-qev" firstAttribute="top" secondItem="i7K-Ur-EHp" secondAttribute="bottom" constant="8" id="Hdf-RX-Vga"/>
+                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="trailing" secondItem="pxc-f3-bhx" secondAttribute="trailingMargin" id="lBk-Nf-kEz"/>
+                            <constraint firstItem="H4R-r0-qev" firstAttribute="centerX" secondItem="i7K-Ur-EHp" secondAttribute="centerX" id="wy5-Yj-BJD"/>
+                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="centerX" secondItem="pxc-f3-bhx" secondAttribute="centerX" id="x2y-wC-hOr"/>
+                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="leading" secondItem="pxc-f3-bhx" secondAttribute="leadingMargin" id="yQw-Ac-Fcd"/>
+                        </constraints>
                     </view>
                     <toolbarItems>
                         <barButtonItem title="Item" id="XWQ-no-N6D"/>
                     </toolbarItems>
+                    <navigationItem key="navigationItem" title="Add Effects" id="yGg-LU-RWK">
+                        <barButtonItem key="leftBarButtonItem" title="Reset All" id="VU3-46-jiT">
+                            <connections>
+                                <action selector="resetAllNavItemAction:" destination="eDW-BS-27P" id="hLy-lD-1FE"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Save" id="TaG-Yo-a30">
+                                <connections>
+                                    <action selector="addEffectsNavBarItemAction:" destination="BYZ-38-t0r" id="wTi-Md-R3F"/>
+                                    <segue destination="Keh-qG-rfc" kind="show" id="OJm-2E-aAP"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Play" id="BPB-7e-TLo"/>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="echoSlider" destination="i7K-Ur-EHp" id="Oh1-dJ-AOY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uSN-Ip-KKH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2009" y="621"/>
+            <point key="canvasLocation" x="2008.8" y="620.23988005997012"/>
         </scene>
-        <!--Recordings List-->
+        <!--Saved Recordings-->
         <scene sceneID="V5p-B4-zCo">
             <objects>
-                <viewController title="Recordings List" id="Keh-qG-rfc" customClass="RecordingsListViewController" customModule="Voice_Recorder" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Keh-qG-rfc" customClass="RecordingsListViewController" customModule="Voice_Recorder" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dbe-lW-Lu3"/>
                         <viewControllerLayoutGuide type="bottom" id="XTd-Lw-9kL"/>
@@ -112,7 +156,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mnn-UP-aev">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Keh-qG-rfc" id="Tdz-3f-lWZ"/>
@@ -128,6 +172,7 @@
                             <constraint firstItem="mnn-UP-aev" firstAttribute="top" secondItem="dbe-lW-Lu3" secondAttribute="bottom" id="nFq-bg-FVR"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Saved Recordings" id="h4J-zP-ma4"/>
                     <connections>
                         <outlet property="recordingsListTableView" destination="mnn-UP-aev" id="LyI-ue-DNz"/>
                     </connections>
@@ -152,7 +197,10 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zzt-sY-cKG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="277.60000000000002" y="776.76161919040487"/>
+            <point key="canvasLocation" x="289" y="620"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="OJm-2E-aAP"/>
+    </inferredMetricsTieBreakers>
 </document>

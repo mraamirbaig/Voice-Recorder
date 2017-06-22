@@ -12,18 +12,31 @@ class EffectsViewController: UIViewController {
 
     var fileName: String!
     
+    @IBOutlet weak var echoSlider: UISlider!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         print("Selected file name is \(fileName)")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func echoSliderValueChanged(_ sender: Any) {
+        
+        print("Slider value is \(echoSlider.value)")
     }
     
+    
+    
+    @IBAction func resetAllNavItemAction(_ sender: Any) {
+        resetAllEffects()
+    }
+    
+    func resetAllEffects() {
+        
+        print("All effects are reset.")
+        echoSlider.setValue(0.5, animated: true)
+    }
 
     /*
     // MARK: - Navigation
