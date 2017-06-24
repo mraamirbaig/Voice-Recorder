@@ -92,7 +92,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i7K-Ur-EHp">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i7K-Ur-EHp">
                                 <rect key="frame" x="14" y="318" width="347" height="31"/>
                                 <connections>
                                     <action selector="echoSliderValueChanged:" destination="eDW-BS-27P" eventType="valueChanged" id="3Ho-Pz-mac"/>
@@ -104,10 +104,23 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koZ-Rh-j9G">
+                                <rect key="frame" x="16" y="617" width="343" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Reset">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="resetAllNavItemAction:" destination="eDW-BS-27P" eventType="touchUpInside" id="LeU-if-yoU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Ux6-n6-Uh4" firstAttribute="top" secondItem="koZ-Rh-j9G" secondAttribute="bottom" constant="20" id="2Pp-ZK-8kk"/>
                             <constraint firstItem="i7K-Ur-EHp" firstAttribute="centerY" secondItem="pxc-f3-bhx" secondAttribute="centerY" id="2YO-89-lbP"/>
+                            <constraint firstItem="koZ-Rh-j9G" firstAttribute="leading" secondItem="pxc-f3-bhx" secondAttribute="leadingMargin" id="5DP-Kn-gXN"/>
+                            <constraint firstItem="koZ-Rh-j9G" firstAttribute="trailing" secondItem="pxc-f3-bhx" secondAttribute="trailingMargin" id="HMe-Sb-Qwd"/>
                             <constraint firstItem="H4R-r0-qev" firstAttribute="top" secondItem="i7K-Ur-EHp" secondAttribute="bottom" constant="8" id="Hdf-RX-Vga"/>
                             <constraint firstItem="i7K-Ur-EHp" firstAttribute="trailing" secondItem="pxc-f3-bhx" secondAttribute="trailingMargin" id="lBk-Nf-kEz"/>
                             <constraint firstItem="H4R-r0-qev" firstAttribute="centerX" secondItem="i7K-Ur-EHp" secondAttribute="centerX" id="wy5-Yj-BJD"/>
@@ -115,15 +128,8 @@
                             <constraint firstItem="i7K-Ur-EHp" firstAttribute="leading" secondItem="pxc-f3-bhx" secondAttribute="leadingMargin" id="yQw-Ac-Fcd"/>
                         </constraints>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem title="Item" id="XWQ-no-N6D"/>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Add Effects" id="yGg-LU-RWK">
-                        <barButtonItem key="leftBarButtonItem" title="Reset All" id="VU3-46-jiT">
-                            <connections>
-                                <action selector="resetAllNavItemAction:" destination="eDW-BS-27P" id="hLy-lD-1FE"/>
-                            </connections>
-                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem title="Save" id="TaG-Yo-a30">
                                 <connections>
@@ -131,12 +137,16 @@
                                     <segue destination="Keh-qG-rfc" kind="show" id="OJm-2E-aAP"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Play" id="BPB-7e-TLo"/>
+                            <barButtonItem title="Play" id="BPB-7e-TLo">
+                                <connections>
+                                    <action selector="playNavBtnItemAction:" destination="eDW-BS-27P" id="TfA-5c-BIu"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="echoSlider" destination="i7K-Ur-EHp" id="Oh1-dJ-AOY"/>
+                        <outlet property="playNavBtnItem" destination="BPB-7e-TLo" id="S8n-8k-IUi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uSN-Ip-KKH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -156,7 +166,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mnn-UP-aev">
-                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Keh-qG-rfc" id="Tdz-3f-lWZ"/>

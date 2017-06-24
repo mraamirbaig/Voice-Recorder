@@ -46,4 +46,14 @@ class DocumentsDirectoryService {
         }
         return nil
     }
+    
+    func getFileOfFileName(_ fileName: String) {
+        
+        print("Getting file of Filename: \(fileName)")
+    }
+    
+    func deleteFileOfFileName(_ fileName: String) {
+        
+        print("Deleting fileof Filename: \(fileName)")
+    }
 }
