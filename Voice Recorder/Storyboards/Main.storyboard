@@ -37,22 +37,6 @@
                                     <action selector="playBtnAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kXD-g3-3LE"/>
                                 </connections>
                             </button>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RUR-uE-rXv">
-                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <items>
-                                    <barButtonItem title="Recordings" id="WiW-YI-Snh">
-                                        <connections>
-                                            <segue destination="Keh-qG-rfc" kind="show" id="tlI-iY-naK"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="h5w-yI-YAq"/>
-                                    <barButtonItem title="Search" id="Lvd-hW-4gr"/>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="DgO-h3-7rg"/>
-                                    <barButtonItem title="Share" id="dfi-jW-6dH"/>
-                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="fbK-Wj-PVG"/>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -62,7 +46,13 @@
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hhH-6J-TBU"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Record" id="C1b-Vg-LeO">
+                        <barButtonItem key="leftBarButtonItem" title="All Recordings" id="CWZ-ld-0Zi">
+                            <connections>
+                                <segue destination="Keh-qG-rfc" kind="show" id="E97-6D-f4c"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Add Effects" id="FZo-Uj-EgE">
                             <connections>
                                 <action selector="addEffectsNavBarItemAction:" destination="BYZ-38-t0r" id="cjG-iu-OTh"/>
@@ -248,6 +238,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="OJm-2E-aAP"/>
+        <segue reference="E97-6D-f4c"/>
     </inferredMetricsTieBreakers>
 </document>
