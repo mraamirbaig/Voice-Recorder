@@ -92,8 +92,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i7K-Ur-EHp">
-                                <rect key="frame" x="14" y="318" width="347" height="31"/>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i7K-Ur-EHp">
+                                <rect key="frame" x="22" y="318" width="331" height="31"/>
                                 <connections>
                                     <action selector="echoSliderValueChanged:" destination="eDW-BS-27P" eventType="valueChanged" id="3Ho-Pz-mac"/>
                                 </connections>
@@ -114,18 +114,34 @@
                                     <action selector="resetAllNavItemAction:" destination="eDW-BS-27P" eventType="touchUpInside" id="LeU-if-yoU"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6K3-Mv-e8C">
+                                <rect key="frame" x="22" y="385" width="331" height="31"/>
+                                <connections>
+                                    <action selector="reverbSliderValueChanged:" destination="eDW-BS-27P" eventType="valueChanged" id="Iyk-HO-JtE"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hall" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7VC-bi-apb">
+                                <rect key="frame" x="172.5" y="423" width="30" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Ux6-n6-Uh4" firstAttribute="top" secondItem="koZ-Rh-j9G" secondAttribute="bottom" constant="20" id="2Pp-ZK-8kk"/>
-                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="centerY" secondItem="pxc-f3-bhx" secondAttribute="centerY" id="2YO-89-lbP"/>
                             <constraint firstItem="koZ-Rh-j9G" firstAttribute="leading" secondItem="pxc-f3-bhx" secondAttribute="leadingMargin" id="5DP-Kn-gXN"/>
+                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="leading" secondItem="pxc-f3-bhx" secondAttribute="leadingMargin" constant="8" id="CUl-XA-CWg"/>
                             <constraint firstItem="koZ-Rh-j9G" firstAttribute="trailing" secondItem="pxc-f3-bhx" secondAttribute="trailingMargin" id="HMe-Sb-Qwd"/>
-                            <constraint firstItem="H4R-r0-qev" firstAttribute="top" secondItem="i7K-Ur-EHp" secondAttribute="bottom" constant="8" id="Hdf-RX-Vga"/>
-                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="trailing" secondItem="pxc-f3-bhx" secondAttribute="trailingMargin" id="lBk-Nf-kEz"/>
-                            <constraint firstItem="H4R-r0-qev" firstAttribute="centerX" secondItem="i7K-Ur-EHp" secondAttribute="centerX" id="wy5-Yj-BJD"/>
-                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="centerX" secondItem="pxc-f3-bhx" secondAttribute="centerX" id="x2y-wC-hOr"/>
-                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="leading" secondItem="pxc-f3-bhx" secondAttribute="leadingMargin" id="yQw-Ac-Fcd"/>
+                            <constraint firstItem="7VC-bi-apb" firstAttribute="centerX" secondItem="6K3-Mv-e8C" secondAttribute="centerX" id="Lhr-sC-vAr"/>
+                            <constraint firstItem="i7K-Ur-EHp" firstAttribute="centerY" secondItem="pxc-f3-bhx" secondAttribute="centerY" id="MiL-vP-rbY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="i7K-Ur-EHp" secondAttribute="trailing" constant="8" id="NYx-Hk-nND"/>
+                            <constraint firstItem="H4R-r0-qev" firstAttribute="top" secondItem="i7K-Ur-EHp" secondAttribute="bottom" constant="8" id="Q3r-hN-p6e"/>
+                            <constraint firstItem="6K3-Mv-e8C" firstAttribute="top" secondItem="H4R-r0-qev" secondAttribute="bottom" constant="8" id="VCv-QC-X31"/>
+                            <constraint firstItem="6K3-Mv-e8C" firstAttribute="trailing" secondItem="i7K-Ur-EHp" secondAttribute="trailing" id="fi1-Er-Zv4"/>
+                            <constraint firstItem="H4R-r0-qev" firstAttribute="centerX" secondItem="i7K-Ur-EHp" secondAttribute="centerX" id="iPT-4W-111"/>
+                            <constraint firstItem="7VC-bi-apb" firstAttribute="top" secondItem="6K3-Mv-e8C" secondAttribute="bottom" constant="8" id="iqe-Ib-mnw"/>
+                            <constraint firstItem="6K3-Mv-e8C" firstAttribute="leading" secondItem="i7K-Ur-EHp" secondAttribute="leading" id="y6V-Fw-9Dd"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -147,6 +163,7 @@
                     <connections>
                         <outlet property="echoSlider" destination="i7K-Ur-EHp" id="Oh1-dJ-AOY"/>
                         <outlet property="playNavBtnItem" destination="BPB-7e-TLo" id="S8n-8k-IUi"/>
+                        <outlet property="reverbSlider" destination="6K3-Mv-e8C" id="EaO-ms-Zai"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uSN-Ip-KKH" userLabel="First Responder" sceneMemberID="firstResponder"/>

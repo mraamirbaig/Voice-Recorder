@@ -15,14 +15,17 @@ class EffectsViewController: UIViewController {
     @IBOutlet weak var playNavBtnItem: UIBarButtonItem!
     //Sliders
     @IBOutlet weak var echoSlider: UISlider!
+    @IBOutlet weak var reverbSlider: UISlider!
     
     var fileName: String!
     
     var audioEngine = AVAudioEngine()
+    var audioFile: AVAudioFile?
     
     //AudioPlayerNodes
     var normalPlayerNode = AVAudioPlayerNode()                     //normal
     var echoPlayerNode = AVAudioPlayerNode()                       //echo
+    var reverbPlayerNode = AVAudioPlayerNode()                     //reverb
     
     
     var showAlertService: ShowAlertService!
@@ -34,45 +37,92 @@ class EffectsViewController: UIViewController {
         showAlertService = ShowAlertService.init(onViewController: self)
         
         if fileName != nil{
-            let audioSession = AVAudioSession.sharedInstance()
-            try? audioSession.setCategory(
-                AVAudioSessionCategoryPlayback)
             
-            let documentsDirectoryService = DocumentsDirectoryService()
-            let file = try? AVAudioFile(forReading: documentsDirectoryService.getFileURLWithFileName(fileName))
-            let buffer = AVAudioPCMBuffer(pcmFormat: file!.processingFormat, frameCapacity: AVAudioFrameCount(file!.length))
-            try! file!.read(into: buffer)
+            let buffer = createBufferForFileName(fileName)
             
-            
-            let normal = AVAudioUnitReverb()
-            normal.loadFactoryPreset(AVAudioUnitReverbPreset.largeHall)
-            normal.wetDryMix = 0
-            
-            let echo = AVAudioUnitDistortion()
-            echo.loadFactoryPreset(AVAudioUnitDistortionPreset.multiEcho1)
-            
-            
-            audioEngine.attach(normalPlayerNode)
-            audioEngine.attach(echoPlayerNode)
-            audioEngine.attach(normal)
-            audioEngine.attach(echo)
-            
-            audioEngine.connect(normalPlayerNode, to:normal, format: buffer.format)
-            audioEngine.connect(normal, to:audioEngine.mainMixerNode, format:buffer.format)
-            
-            audioEngine.connect(echoPlayerNode, to:echo, format: buffer.format)
-            audioEngine.connect(echo, to:audioEngine.mainMixerNode, format:buffer.format)
-            
-            normalPlayerNode.scheduleBuffer(buffer, at:nil, options:AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
-            echoPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
-            
-            audioEngine.prepare()
-            try! audioEngine.start()
+            if buffer != nil {
+                
+                let audioSession = AVAudioSession.sharedInstance()
+                try? audioSession.setCategory(
+                    AVAudioSessionCategoryPlayback)
+                setUpAudioEngineWithBuffer(buffer!)
+            }
         }else{
+            playNavBtnItem.isEnabled = false
             showAlertService.showAlertWithAlertTitle(title: "Cant play", alertMessage: "No file to play.", actionTitle: "Ok")
         }
         
         resetAllEffects()
+    }
+    
+    func createBufferForFileName(_ fileName: String) -> AVAudioPCMBuffer? {
+        
+        let documentsDirectoryService = DocumentsDirectoryService()
+        audioFile = try? AVAudioFile(forReading: documentsDirectoryService.getFileURLWithFileName(fileName))
+        
+        if audioFile != nil {
+            let buffer = AVAudioPCMBuffer(pcmFormat: audioFile!.processingFormat, frameCapacity: AVAudioFrameCount(audioFile!.length))
+            try! audioFile!.read(into: buffer)
+            
+            return buffer
+        }
+        return nil
+    }
+    
+    func setUpAudioEngineWithBuffer(_ buffer: AVAudioPCMBuffer) {
+        
+        attachNormalEffectToAudioEngine(audioEngine, buffer: buffer)
+        attachEchoEffectToAudioEngine(audioEngine, buffer: buffer)
+        attachReverbEffectToAudioEngine(audioEngine, buffer: buffer)
+        
+        audioEngine.prepare()
+        try! audioEngine.start()
+    }
+    
+    func attachNormalEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+        
+        let normal = AVAudioUnitReverb()
+        normal.loadFactoryPreset(AVAudioUnitReverbPreset.largeHall)
+        normal.wetDryMix = 0
+        audioEngine.attach(normalPlayerNode)
+        audioEngine.attach(normal)
+        audioEngine.connect(normalPlayerNode, to:normal, format: buffer.format)
+        audioEngine.connect(normal, to:audioEngine.mainMixerNode, format:buffer.format)
+        normalPlayerNode.scheduleBuffer(buffer, at:nil, options:AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
+    }
+    
+    func attachEchoEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+        
+        let echo = AVAudioUnitDistortion()
+        echo.loadFactoryPreset(AVAudioUnitDistortionPreset.multiEcho2)
+        //Adjust the settings of the Echo effect:
+        echo.preGain = -2
+        echo.wetDryMix = 67
+        
+        audioEngine.attach(echoPlayerNode)
+        audioEngine.attach(echo)
+        audioEngine.connect(echoPlayerNode, to:echo, format: buffer.format)
+        audioEngine.connect(echo, to:audioEngine.mainMixerNode, format:buffer.format)
+        echoPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
+    }
+    
+    func attachReverbEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+        
+        let reverb = AVAudioUnitReverb()
+        reverb.loadFactoryPreset(AVAudioUnitReverbPreset.largeHall)
+        reverb.wetDryMix = 100
+        
+        audioEngine.attach(reverbPlayerNode)
+        audioEngine.attach(reverb)
+        audioEngine.connect(reverbPlayerNode, to:reverb, format: buffer.format)
+        audioEngine.connect(reverb, to:audioEngine.mainMixerNode, format:buffer.format)
+        reverbPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAudio()
     }
     
     func resetAllEffects() {
@@ -84,6 +134,9 @@ class EffectsViewController: UIViewController {
         //Reset echo effect
         echoPlayerNode.volume = 0.0
         echoSlider.setValue(0.0, animated: true)
+        
+        reverbPlayerNode.volume = 0.0
+        reverbSlider.setValue(0.0, animated: true)
     }
     
     @IBAction func resetAllNavItemAction(_ sender: Any) {
@@ -96,6 +149,7 @@ class EffectsViewController: UIViewController {
     }
     
     func togglePlayStopBtn() {
+        
         if playNavBtnItem.title == PLAY_BTN_TITLE.PLAY {
             playAudio()
         }else{
@@ -104,33 +158,46 @@ class EffectsViewController: UIViewController {
     }
     
     func playAudio() {
+        
         playAllAudioPlayerNodes()
         playNavBtnItem.title = PLAY_BTN_TITLE.STOP
     }
     
     func playAllAudioPlayerNodes() {
-        try! audioEngine.start()
+        
         normalPlayerNode.play()
         echoPlayerNode.play()
+        reverbPlayerNode.play()
     }
     
     func stopAudio() {
+        
         stopAllAudioPlayerNodes()
         playNavBtnItem.title = PLAY_BTN_TITLE.PLAY
     }
     
     func stopAllAudioPlayerNodes() {
+        
         normalPlayerNode.stop()
         echoPlayerNode.stop()
+        reverbPlayerNode.stop()
     }
     
     @IBAction func echoSliderValueChanged(_ sender: Any) {
         
         let echoSliderValue = echoSlider.value
         echoPlayerNode.volume = echoSliderValue
-        normalPlayerNode.volume = 1 - echoSliderValue
+        
+        normalPlayerNode.volume = 1 - echoSliderValue - reverbSlider.value
     }
     
+    @IBAction func reverbSliderValueChanged(_ sender: Any) {
+        
+        let reverbSliderValue = reverbSlider.value
+        reverbPlayerNode.volume = reverbSliderValue
+        
+        normalPlayerNode.volume = 1 - reverbSliderValue - echoSlider.value
+    }
     
     /*
     // MARK: - Navigation
