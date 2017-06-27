@@ -58,7 +58,7 @@ class EffectsViewController: UIViewController {
     func createBufferForFileName(_ fileName: String) -> AVAudioPCMBuffer? {
         
         let documentsDirectoryService = DocumentsDirectoryService()
-        audioFile = try? AVAudioFile(forReading: documentsDirectoryService.getFileURLWithFileName(fileName))
+        audioFile = try? AVAudioFile(forReading: documentsDirectoryService.createFileURLWithFileName(fileName))
         
         if audioFile != nil {
             let buffer = AVAudioPCMBuffer(pcmFormat: audioFile!.processingFormat, frameCapacity: AVAudioFrameCount(audioFile!.length))

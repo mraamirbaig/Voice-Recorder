@@ -67,7 +67,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
                                   AVSampleRateKey: 44100.0] as [String : Any]
             do {
                 
-                try soundRecorder = AVAudioRecorder.init(url: documentsDirectoryService.getFileURLWithFileName(fileName), settings: recordSettings)
+                try soundRecorder = AVAudioRecorder.init(url: documentsDirectoryService.createFileURLWithFileName(fileName), settings: recordSettings)
                 
                 soundRecorder.delegate = self
                 soundRecorder.prepareToRecord()
@@ -139,7 +139,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     func setUpPlayerWithFileName(_ fileName: String) -> Bool{
         
         do {
-            try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.getFileURLWithFileName(fileName))
+            try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.createFileURLWithFileName(fileName))
             
             soundPlayer.delegate = self
             soundPlayer.prepareToPlay()

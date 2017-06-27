@@ -11,24 +11,30 @@ import Foundation
 
 class DocumentsDirectoryService {
     
-    func getPath() -> URL {
+    func getPathURL() -> URL {
         let fileManager = FileManager.default
         let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[0]
     }
     
-    func getFileURLWithFileName(_ fileName: String) -> URL{
+    func createFileURLWithFileName(_ fileName: String) -> URL{
         
-        let fileURL = getPath().appendingPathComponent(fileName)
+        let fileURL = getPathURL().appendingPathComponent(fileName)
         print(fileURL)
         return fileURL
     }
     
+    func getSearchPath() -> String? {
+        
+        let searchPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+        return searchPath
+    }
+    
     func getAllFiles() -> FileManager.DirectoryEnumerator? {
-        if let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
+        if let searchPath = getSearchPath() {
             
             let fileManager = FileManager.default
-            return fileManager.enumerator(atPath: documentDirectoryPath)
+            return fileManager.enumerator(atPath: searchPath)
         }
         return nil
     }
@@ -47,13 +53,34 @@ class DocumentsDirectoryService {
         return nil
     }
     
+    func deleteFileOfFileName(_ fileName: String) -> Bool {
+        
+        print("Deleting fileof Filename: \(fileName)")
+        if let searchFilePathURL = getSearchFilePathURLForFileName(fileName) {
+            
+            let fileManager = FileManager.default
+            do {
+                try fileManager.removeItem(at: searchFilePathURL)
+                return true
+            }
+            catch {
+                return false
+            }
+        }
+        return false
+    }
+    
+    func getSearchFilePathURLForFileName(_ fileName: String) -> URL? {
+        
+        if let searchPath = getSearchPath() {
+            
+            return URL(fileURLWithPath: searchPath).appendingPathComponent(fileName)
+        }
+        return nil
+    }
+    
     func getFileOfFileName(_ fileName: String) {
         
         print("Getting file of Filename: \(fileName)")
-    }
-    
-    func deleteFileOfFileName(_ fileName: String) {
-        
-        print("Deleting fileof Filename: \(fileName)")
     }
 }

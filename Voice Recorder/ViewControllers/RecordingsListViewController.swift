@@ -9,9 +9,17 @@
 import UIKit
 import AVFoundation
 
+struct EDIT_BTN_TITLE {
+    static let EDIT = "Edit"
+    static let DONE = "Done"
+}
+
 class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     @IBOutlet weak var recordingsListTableView: UITableView!
+    
+    @IBOutlet weak var editNavBtn: UIBarButtonItem!
+    
     
     let audioSession = AVAudioSession.sharedInstance()
     var soundPlayer : AVAudioPlayer!
@@ -33,6 +41,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         if let recordingListNames = getRecordingListNames() {
             recordingsListNames = recordingListNames
         }
+        self.enableDisableEditBtn()
     }
     
     func getRecordingListNames() -> [String]? {
@@ -47,6 +56,23 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
             recordingsListTableView.reloadData()
         }
     }
+    
+    @IBAction func editNavAction(_ sender: Any) {
+        
+        toggleEditDoneBtn()
+    }
+    
+    func toggleEditDoneBtn() {
+        
+        if editNavBtn.title == EDIT_BTN_TITLE.EDIT {
+            recordingsListTableView.isEditing = true
+            editNavBtn.title = EDIT_BTN_TITLE.DONE
+        }else{
+            recordingsListTableView.isEditing = false
+            editNavBtn.title = EDIT_BTN_TITLE.EDIT
+        }
+    }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recordingsListNames.count
@@ -84,7 +110,35 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
                 stopPlayer()
                 playRecordingAtIndexPath(indexPath)
             }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
             
+            if self.documentsDirectoryService.deleteFileOfFileName(self.recordingsListNames[indexPath.row]) {
+                self.recordingsListNames.remove(at: indexPath.row)
+                self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
+                self.enableDisableEditBtn()
+            }
+        }
+        return [deleteRowAction]
+    }
+    
+    func enableDisableEditBtn() {
+        if recordingsListNames.count == 0 {
+            if editNavBtn.title == EDIT_BTN_TITLE.DONE {
+                toggleEditDoneBtn()
+            }
+            editNavBtn.isEnabled = false
+        }else{
+            editNavBtn.isEnabled = true
         }
     }
     
@@ -118,7 +172,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
             try audioSession.setCategory(
                 AVAudioSessionCategoryPlayback)
             do {
-                try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.getFileURLWithFileName(fileName))
+                try soundPlayer = AVAudioPlayer(contentsOf: documentsDirectoryService.createFileURLWithFileName(fileName))
                 
                 soundPlayer.delegate = self
                 soundPlayer.prepareToPlay()

@@ -183,7 +183,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mnn-UP-aev">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Keh-qG-rfc" id="Tdz-3f-lWZ"/>
@@ -199,8 +199,17 @@
                             <constraint firstItem="mnn-UP-aev" firstAttribute="top" secondItem="dbe-lW-Lu3" secondAttribute="bottom" id="nFq-bg-FVR"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Saved Recordings" id="h4J-zP-ma4"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Saved Recordings" id="h4J-zP-ma4">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="01S-bZ-OmO">
+                            <connections>
+                                <action selector="editNavAction:" destination="Keh-qG-rfc" id="tvG-z7-tgz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="editNavBtn" destination="01S-bZ-OmO" id="BFW-oo-774"/>
                         <outlet property="recordingsListTableView" destination="mnn-UP-aev" id="LyI-ue-DNz"/>
                     </connections>
                 </viewController>

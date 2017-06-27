@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "519856521.618827"
+            timestampString = "520289969.188226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "audioPlayerDecodeErrorDidOccur(_:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "519856521.618827"
+            timestampString = "520289969.188226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "audioPlayerBeginInterruption(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,28 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "519856521.618827"
+            timestampString = "520289969.188226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "setCellAsIsStopped(_:atIndexPath:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
-            timestampString = "520274761.251636"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
-            landmarkName = "playAllAudioPlayerNodes()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
