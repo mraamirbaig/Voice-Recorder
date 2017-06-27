@@ -149,7 +149,7 @@
                         <rightBarButtonItems>
                             <barButtonItem title="Save" id="TaG-Yo-a30">
                                 <connections>
-                                    <action selector="addEffectsNavBarItemAction:" destination="BYZ-38-t0r" id="wTi-Md-R3F"/>
+                                    <action selector="saveNavBtnItem:" destination="eDW-BS-27P" id="T0i-gO-3mV"/>
                                     <segue destination="Keh-qG-rfc" kind="show" id="OJm-2E-aAP"/>
                                 </connections>
                             </barButtonItem>
@@ -183,20 +183,31 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mnn-UP-aev">
-                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="515"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Keh-qG-rfc" id="Tdz-3f-lWZ"/>
                                     <outlet property="delegate" destination="Keh-qG-rfc" id="0Ht-54-BfH"/>
                                 </connections>
                             </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="FCA-nS-yUx">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="mnn-UP-aev" firstAttribute="leading" secondItem="9qA-Gh-FTJ" secondAttribute="leading" id="01Z-TM-zfi"/>
                             <constraint firstAttribute="trailing" secondItem="mnn-UP-aev" secondAttribute="trailing" id="3vg-oV-sJB"/>
+                            <constraint firstItem="mnn-UP-aev" firstAttribute="top" secondItem="FCA-nS-yUx" secondAttribute="bottom" id="Bem-nm-mhE"/>
+                            <constraint firstItem="FCA-nS-yUx" firstAttribute="top" secondItem="dbe-lW-Lu3" secondAttribute="bottom" id="QLf-sN-vVb"/>
                             <constraint firstItem="XTd-Lw-9kL" firstAttribute="top" secondItem="mnn-UP-aev" secondAttribute="bottom" id="gCo-Qk-WVy"/>
-                            <constraint firstItem="mnn-UP-aev" firstAttribute="top" secondItem="dbe-lW-Lu3" secondAttribute="bottom" id="nFq-bg-FVR"/>
+                            <constraint firstItem="FCA-nS-yUx" firstAttribute="leading" secondItem="9qA-Gh-FTJ" secondAttribute="leading" id="h9Z-uF-xic"/>
+                            <constraint firstAttribute="trailing" secondItem="FCA-nS-yUx" secondAttribute="trailing" id="k6m-7H-aFo"/>
                         </constraints>
                     </view>
                     <toolbarItems/>

@@ -44,12 +44,25 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         self.enableDisableEditBtn()
     }
     
+    
+    
     func getRecordingListNames() -> [String]? {
         
         return documentsDirectoryService.getAllRecordingFileNames()
     }
     
-    func reloadrecordingList() {
+    func enableDisableEditBtn() {
+        if recordingsListNames.count == 0 {
+            if editNavBtn.title == EDIT_BTN_TITLE.DONE {
+                toggleEditDoneBtn()
+            }
+            editNavBtn.isEnabled = false
+        }else{
+            editNavBtn.isEnabled = true
+        }
+    }
+    
+    func reloadRecordingList() {
         
         if let recordingListNames = getRecordingListNames() {
             self.recordingsListNames = recordingListNames
@@ -75,6 +88,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return recordingsListNames.count
     }
     
@@ -122,25 +136,38 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         
         let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
             
-            if self.documentsDirectoryService.deleteFileOfFileName(self.recordingsListNames[indexPath.row]) {
+            if self.deleteFileOfFileName(self.recordingsListNames[indexPath.row]) {
                 self.recordingsListNames.remove(at: indexPath.row)
                 self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
                 self.enableDisableEditBtn()
             }
         }
-        return [deleteRowAction]
+        
+        let shareRowAction = UITableViewRowAction.init(style: .normal, title: "Share") { (rowAction, indexPath) in
+            
+            self.shareFileOfFileName(self.recordingsListNames[indexPath.row])
+        }
+        return [deleteRowAction,shareRowAction]
     }
     
-    func enableDisableEditBtn() {
-        if recordingsListNames.count == 0 {
-            if editNavBtn.title == EDIT_BTN_TITLE.DONE {
-                toggleEditDoneBtn()
-            }
-            editNavBtn.isEnabled = false
+    func deleteFileOfFileName(_ fileName: String) -> Bool {
+        
+        if self.documentsDirectoryService.deleteFileOfFileName (fileName) {
+            return true
+        }
+        return false
+    }
+    
+    func shareFileOfFileName(_ fileName: String) {
+        
+        if let fileURL = self.documentsDirectoryService.getSearchFilePathURLForFileName(fileName) {
+            let activityViewController : UIActivityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
         }else{
-            editNavBtn.isEnabled = true
+            showAlertService.showAlertWithAlertTitle(title: "File not found", alertMessage: "Unable to find the file. Please try again.", actionTitle: "Ok")
         }
     }
+    
     
     func playRecordingAtIndexPath(_ indexPath: IndexPath) {
         

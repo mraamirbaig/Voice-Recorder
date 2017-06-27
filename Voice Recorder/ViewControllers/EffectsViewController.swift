@@ -187,7 +187,6 @@ class EffectsViewController: UIViewController {
         
         let echoSliderValue = echoSlider.value
         echoPlayerNode.volume = echoSliderValue
-        
         normalPlayerNode.volume = 1 - echoSliderValue - reverbSlider.value
     }
     
@@ -195,8 +194,19 @@ class EffectsViewController: UIViewController {
         
         let reverbSliderValue = reverbSlider.value
         reverbPlayerNode.volume = reverbSliderValue
-        
         normalPlayerNode.volume = 1 - reverbSliderValue - echoSlider.value
+    }
+    
+    
+    @IBAction func saveNavBtnItem(_ sender: Any) {
+        
+        saveAudioEffects()
+    }
+    
+    func saveAudioEffects() -> Bool {
+        
+        
+        return false
     }
     
     /*
