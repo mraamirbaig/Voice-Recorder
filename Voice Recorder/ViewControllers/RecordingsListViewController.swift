@@ -14,8 +14,10 @@ struct EDIT_BTN_TITLE {
     static let DONE = "Done"
 }
 
-class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, AVAudioRecorderDelegate, AVAudioPlayerDelegate, UISearchBarDelegate {
     
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var recordingsListTableView: UITableView!
     
     @IBOutlet weak var editNavBtn: UIBarButtonItem!
@@ -24,10 +26,12 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     let audioSession = AVAudioSession.sharedInstance()
     var soundPlayer : AVAudioPlayer!
     var recordingsListNames = [String]()
+    var filteredRecordingsListNames = [String]()
     
     let documentsDirectoryService = DocumentsDirectoryService()
     var showAlertService: ShowAlertService!
     
+    var searchActive : Bool = false
     var indexPathOfPlayingCell: IndexPath?
     
     override func viewDidLoad() {
@@ -43,8 +47,6 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         }
         self.enableDisableEditBtn()
     }
-    
-    
     
     func getRecordingListNames() -> [String]? {
         
@@ -87,15 +89,73 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     }
     
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    //UISearchBarDelegate methods
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        stopPlayer()
+        searchActive = true
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        stopPlayer()
+        searchActive = false
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        stopPlayer()
+        searchBar.text = ""
+        searchBar.endEditing(true)
+        searchActive = false
+        self.recordingsListTableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchActive = false
+        searchBar.endEditing(true)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        stopPlayer()
+        if searchText.characters.count > 0 {
+        filteredRecordingsListNames = recordingsListNames.filter({ (recordingName) -> Bool in
+            let tmp: NSString = recordingName as NSString
+            let range = tmp.range(of: searchText, options: .caseInsensitive)
+            return range.location != NSNotFound
+        })
+        }else {
+            filteredRecordingsListNames = recordingsListNames
+        }
         
+        self.recordingsListTableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return CGFloat.leastNormalMagnitude
+        }
+        return tableView.sectionHeaderHeight
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchActive == true {
+            return filteredRecordingsListNames.count
+        }
         return recordingsListNames.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordingListCellIdentifier", for: indexPath) as! RecordingListCell
-        cell.recordingNameLbl.text = recordingsListNames[indexPath.row]
+        
+        if searchActive == true {
+            cell.recordingNameLbl.text = filteredRecordingsListNames[indexPath.row]
+        } else {
+            cell.recordingNameLbl.text = recordingsListNames[indexPath.row]
+        }
         
         if indexPathOfPlayingCell != nil {
             if indexPathOfPlayingCell == indexPath {

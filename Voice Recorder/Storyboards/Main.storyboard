@@ -172,32 +172,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mnn-UP-aev">
-                                <rect key="frame" x="0.0" y="108" width="375" height="515"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="Keh-qG-rfc" id="Tdz-3f-lWZ"/>
-                                    <outlet property="delegate" destination="Keh-qG-rfc" id="0Ht-54-BfH"/>
-                                </connections>
-                            </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="FCA-nS-yUx">
+                            <searchBar contentMode="redraw" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DCp-TY-Sbc">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <scopeButtonTitles>
-                                    <string>Title</string>
-                                    <string>Title</string>
-                                </scopeButtonTitles>
+                                <connections>
+                                    <outlet property="delegate" destination="Keh-qG-rfc" id="c9b-7p-fIk"/>
+                                </connections>
                             </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="PVx-VD-VYj">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Keh-qG-rfc" id="Oiz-Js-nQe"/>
+                                    <outlet property="delegate" destination="Keh-qG-rfc" id="tHd-dP-aPZ"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="mnn-UP-aev" firstAttribute="leading" secondItem="9qA-Gh-FTJ" secondAttribute="leading" id="01Z-TM-zfi"/>
-                            <constraint firstAttribute="trailing" secondItem="mnn-UP-aev" secondAttribute="trailing" id="3vg-oV-sJB"/>
-                            <constraint firstItem="mnn-UP-aev" firstAttribute="top" secondItem="FCA-nS-yUx" secondAttribute="bottom" id="Bem-nm-mhE"/>
-                            <constraint firstItem="FCA-nS-yUx" firstAttribute="top" secondItem="dbe-lW-Lu3" secondAttribute="bottom" id="QLf-sN-vVb"/>
-                            <constraint firstItem="XTd-Lw-9kL" firstAttribute="top" secondItem="mnn-UP-aev" secondAttribute="bottom" id="gCo-Qk-WVy"/>
-                            <constraint firstItem="FCA-nS-yUx" firstAttribute="leading" secondItem="9qA-Gh-FTJ" secondAttribute="leading" id="h9Z-uF-xic"/>
-                            <constraint firstAttribute="trailing" secondItem="FCA-nS-yUx" secondAttribute="trailing" id="k6m-7H-aFo"/>
+                            <constraint firstItem="PVx-VD-VYj" firstAttribute="top" secondItem="DCp-TY-Sbc" secondAttribute="bottom" id="6ij-fI-jKw"/>
+                            <constraint firstAttribute="trailing" secondItem="PVx-VD-VYj" secondAttribute="trailing" id="8ly-0q-tDu"/>
+                            <constraint firstItem="XTd-Lw-9kL" firstAttribute="top" secondItem="PVx-VD-VYj" secondAttribute="bottom" id="RbX-Wp-sHX"/>
+                            <constraint firstItem="DCp-TY-Sbc" firstAttribute="top" secondItem="dbe-lW-Lu3" secondAttribute="bottom" id="fcO-3W-cJk"/>
+                            <constraint firstAttribute="trailing" secondItem="DCp-TY-Sbc" secondAttribute="trailing" id="n6m-kV-v03"/>
+                            <constraint firstItem="DCp-TY-Sbc" firstAttribute="leading" secondItem="9qA-Gh-FTJ" secondAttribute="leading" id="y2O-Oo-IDB"/>
+                            <constraint firstItem="PVx-VD-VYj" firstAttribute="leading" secondItem="9qA-Gh-FTJ" secondAttribute="leading" id="y4b-pO-v8i"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -208,10 +208,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="editNavBtn" destination="01S-bZ-OmO" id="BFW-oo-774"/>
-                        <outlet property="recordingsListTableView" destination="mnn-UP-aev" id="LyI-ue-DNz"/>
+                        <outlet property="recordingsListTableView" destination="PVx-VD-VYj" id="7hs-a3-Fxe"/>
+                        <outlet property="searchBar" destination="DCp-TY-Sbc" id="V5v-bB-kSe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Mm-pk-Fkg" userLabel="First Responder" sceneMemberID="firstResponder"/>
