@@ -88,7 +88,6 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         }
     }
     
-    
     //UISearchBarDelegate methods
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -97,31 +96,42 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        
         stopPlayer()
         searchActive = false
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
         stopPlayer()
         searchBar.text = ""
         searchBar.endEditing(true)
         searchActive = false
+        if let recordingListNames = getRecordingListNames() {
+            self.recordingsListNames = recordingListNames
+        }
         self.recordingsListTableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
         searchActive = false
         searchBar.endEditing(true)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         stopPlayer()
+        if let recordingListNames = getRecordingListNames() {
+            self.recordingsListNames = recordingListNames
+        }
+        
         if searchText.characters.count > 0 {
-        filteredRecordingsListNames = recordingsListNames.filter({ (recordingName) -> Bool in
-            let tmp: NSString = recordingName as NSString
-            let range = tmp.range(of: searchText, options: .caseInsensitive)
-            return range.location != NSNotFound
-        })
+            filteredRecordingsListNames = recordingsListNames.filter({ (recordingName) -> Bool in
+                let tmp: NSString = recordingName as NSString
+                let range = tmp.range(of: searchText, options: .caseInsensitive)
+                return range.location != NSNotFound
+            })
         }else {
             filteredRecordingsListNames = recordingsListNames
         }
@@ -129,7 +139,10 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         self.recordingsListTableView.reloadData()
     }
     
+    //TableView delegate methods
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
         if section == 0 {
             return CGFloat.leastNormalMagnitude
         }
@@ -137,10 +150,12 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
         return CGFloat.leastNormalMagnitude
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if searchActive == true {
             return filteredRecordingsListNames.count
         }
@@ -195,9 +210,19 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
+            let recordingFileNameToBeDeleted: String!
+            if self.searchActive == true {
+                recordingFileNameToBeDeleted = self.filteredRecordingsListNames[indexPath.row]
+            }else{
+                recordingFileNameToBeDeleted = self.recordingsListNames[indexPath.row]
+            }
             
-            if self.deleteFileOfFileName(self.recordingsListNames[indexPath.row]) {
-                self.recordingsListNames.remove(at: indexPath.row)
+            if self.deleteFileOfFileName(recordingFileNameToBeDeleted) {
+                if self.searchActive == true {
+                    self.filteredRecordingsListNames.remove(at: indexPath.row)
+                }else{
+                    self.recordingsListNames.remove(at: indexPath.row)
+                }
                 self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
                 self.enableDisableEditBtn()
             }
@@ -205,7 +230,14 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         
         let shareRowAction = UITableViewRowAction.init(style: .normal, title: "Share") { (rowAction, indexPath) in
             
-            self.shareFileOfFileName(self.recordingsListNames[indexPath.row])
+            let recordingFileNameToBeShared: String!
+            if self.searchActive == true {
+                recordingFileNameToBeShared = self.filteredRecordingsListNames[indexPath.row]
+            }else{
+                recordingFileNameToBeShared = self.recordingsListNames[indexPath.row]
+            }
+            
+            self.shareFileOfFileName(recordingFileNameToBeShared)
         }
         return [deleteRowAction,shareRowAction]
     }
@@ -228,7 +260,6 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         }
     }
     
-    
     func playRecordingAtIndexPath(_ indexPath: IndexPath) {
         
         let fileName = recordingsListNames[indexPath.row]
@@ -239,7 +270,6 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         }else{
             showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to setup player. Please try again.", actionTitle: "Ok")
         }
-        
     }
     
     func stopPlayer() {
