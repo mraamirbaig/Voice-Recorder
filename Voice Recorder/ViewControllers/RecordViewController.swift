@@ -26,6 +26,8 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     var soundPlayer : AVAudioPlayer!
     var fileName: String?
     
+    var audioIsPlaying = false
+    
     let documentsDirectoryService = DocumentsDirectoryService()
     var showAlertService: ShowAlertService!
     

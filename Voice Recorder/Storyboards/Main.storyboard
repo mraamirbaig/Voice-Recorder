@@ -139,8 +139,7 @@
                         <rightBarButtonItems>
                             <barButtonItem title="Save" id="TaG-Yo-a30">
                                 <connections>
-                                    <action selector="saveNavBtnItem:" destination="eDW-BS-27P" id="T0i-gO-3mV"/>
-                                    <segue destination="Keh-qG-rfc" kind="show" id="OJm-2E-aAP"/>
+                                    <action selector="saveNavBtnItem:" destination="eDW-BS-27P" id="5ll-vb-gDK"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Play" id="BPB-7e-TLo">
@@ -237,7 +236,4 @@
             <point key="canvasLocation" x="289" y="620"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="E97-6D-f4c"/>
-    </inferredMetricsTieBreakers>
 </document>

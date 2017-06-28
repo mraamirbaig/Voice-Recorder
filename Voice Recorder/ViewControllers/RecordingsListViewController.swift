@@ -210,6 +210,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
+            
             let recordingFileNameToBeDeleted: String!
             if self.searchActive == true {
                 recordingFileNameToBeDeleted = self.filteredRecordingsListNames[indexPath.row]

@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "520297789.908239"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379252.671493"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
-            landmarkName = "audioPlayerDecodeErrorDidOccur(_:error:)"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "saveAudioEffects()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "520297789.908239"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379021.089117"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "audioPlayerBeginInterruption(_:)"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
+            landmarkName = "saveNavBtnItem(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,13 +41,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "520297789.908239"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379252.671493"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
-            landmarkName = "setCellAsIsStopped(_:atIndexPath:)"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "saveAudioEffects()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -57,13 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "520297789.908239"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379252.671493"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "tableView(_:editActionsForRowAt:)"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
+            landmarkName = "saveAudioEffects()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -73,44 +73,60 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "520297789.908239"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379252.671493"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
-            landmarkName = "tableView(_:editActionsForRowAt:)"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
+            landmarkName = "saveAudioEffects()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379252.671493"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "saveAudioEffects()"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Voice_Recorder.RecordingsListViewController.tableView (__ObjC.UITableView, editActionsForRowAt : Foundation.IndexPath) -&gt; Swift.Optional&lt;Swift.Array&lt;__ObjC.UITableViewRowAction&gt;&gt;"
+                  symbolName = "Voice_Recorder.EffectsViewController.saveAudioEffects () -&gt; Swift.Bool"
                   moduleName = "Voice Recorder"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/AamirBaig/Desktop/Practice/IOS/Voice-Recorder/Voice%20Recorder/ViewControllers/RecordingsListViewController.swift"
-                  timestampString = "520296077.889685"
+                  urlString = "file:///Users/AamirBaig/Desktop/Practice/IOS/Voice-Recorder/Voice%20Recorder/ViewControllers/EffectsViewController.swift"
+                  timestampString = "520379252.80987"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "148"
-                  endingLineNumber = "148"
-                  offsetFromSymbolStart = "480">
+                  startingLineNumber = "223"
+                  endingLineNumber = "223"
+                  offsetFromSymbolStart = "764">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Voice_Recorder.RecordingsListViewController.(tableView (__ObjC.UITableView, editActionsForRowAt : Foundation.IndexPath) -&gt; Swift.Optional&lt;Swift.Array&lt;__ObjC.UITableViewRowAction&gt;&gt;).(closure #2)"
+                  symbolName = "Voice_Recorder.EffectsViewController.(saveAudioEffects () -&gt; Swift.Bool).(closure #1)"
                   moduleName = "Voice Recorder"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/AamirBaig/Desktop/Practice/IOS/Voice-Recorder/Voice%20Recorder/ViewControllers/RecordingsListViewController.swift"
-                  timestampString = "520296077.891143"
+                  urlString = "file:///Users/AamirBaig/Desktop/Practice/IOS/Voice-Recorder/Voice%20Recorder/ViewControllers/EffectsViewController.swift"
+                  timestampString = "520379252.81132"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "150"
-                  endingLineNumber = "150"
-                  offsetFromSymbolStart = "32">
+                  startingLineNumber = "224"
+                  endingLineNumber = "224"
+                  offsetFromSymbolStart = "40">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -121,13 +137,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Voice Recorder/ViewControllers/RecordingsListViewController.swift"
-            timestampString = "520297789.908239"
+            filePath = "Voice Recorder/ViewControllers/EffectsViewController.swift"
+            timestampString = "520379011.088082"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
-            landmarkName = "tableView(_:editActionsForRowAt:)"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "saveAudioEffects()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -21,14 +21,17 @@ class EffectsViewController: UIViewController {
     
     var audioEngine = AVAudioEngine()
     var audioFile: AVAudioFile?
+    var buffer: AVAudioPCMBuffer?
     
     //AudioPlayerNodes
     var normalPlayerNode = AVAudioPlayerNode()                     //normal
     var echoPlayerNode = AVAudioPlayerNode()                       //echo
     var reverbPlayerNode = AVAudioPlayerNode()                     //reverb
     
+    let audioMixer = AVAudioMixerNode()
     
     var showAlertService: ShowAlertService!
+    let documentsDirectoryService = DocumentsDirectoryService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +41,7 @@ class EffectsViewController: UIViewController {
         
         if fileName != nil{
             
-            let buffer = createBufferForFileName(fileName)
+            buffer = createBufferForFileName(fileName)
             
             if buffer != nil {
                 
@@ -57,7 +60,6 @@ class EffectsViewController: UIViewController {
     
     func createBufferForFileName(_ fileName: String) -> AVAudioPCMBuffer? {
         
-        let documentsDirectoryService = DocumentsDirectoryService()
         audioFile = try? AVAudioFile(forReading: documentsDirectoryService.createFileURLWithFileName(fileName))
         
         if audioFile != nil {
@@ -119,6 +121,11 @@ class EffectsViewController: UIViewController {
         reverbPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
     }
     
+    func attachMixerToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+        audioEngine.attach(audioMixer)
+        
+        audioEngine.connect(audioMixer, to: audioEngine.outputNode, format: nil)
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -200,11 +207,70 @@ class EffectsViewController: UIViewController {
     
     @IBAction func saveNavBtnItem(_ sender: Any) {
         
-        saveAudioEffects()
+        //stopAudio()
+        //saveAudioEffects()
     }
     
     func saveAudioEffects() -> Bool {
         
+      
+        let newAudio = try! AVAudioFile.init(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: audioEngine.mainMixerNode.outputFormat(forBus: 0).settings)
+        
+        if audioEngine.isRunning == false {
+            try! audioEngine.start()
+        }
+        
+        audioEngine.outputNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: audioEngine.mainMixerNode.outputFormat(forBus: 0)) { (buffer, time) -> Void in
+            if (newAudio.length) < (self.audioFile!.length) {
+            try! newAudio.write(from: buffer)
+            }else{
+                self.audioEngine.outputNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+                print("Normal Did you like it? Please, vote up for my question")
+            }
+            //return
+        }
+
+        //Your new file on which you want to save some changed audio, and prepared to be bufferd in some new data...
+        
+        //Now install a Tap on the output bus to "record" the transformed file on a our newAudio file. 
+        
+//        normalPlayerNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: buffer!.format){
+//            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
+//            
+//            if (newAudio.length) < ( self.audioFile!.length){//Let us know when to stop saving the file, otherwise saving infinitely
+//                
+//                try! newAudio.write(from: buffer)//let's write the buffer result into our file
+//                
+//            }else{
+//                self.normalPlayerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+//                print("Normal Did you like it? Please, vote up for my question")
+//            }
+//        }
+//
+//        echoPlayerNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: buffer!.format){
+//            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
+//            
+//            if (newAudio.length) < ( self.audioFile!.length){//Let us know when to stop saving the file, otherwise saving infinitely
+//                
+//                try! newAudio.write(from: buffer)//let's write the buffer result into our file
+//                
+//            }else{
+//                self.echoPlayerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+//                print("Echo Did you like it? Please, vote up for my question")
+//            }
+//        }
+//
+//        reverbPlayerNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: buffer!.format){
+//            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
+//            
+//            if (newAudio.length) < ( self.audioFile!.length){//Let us know when to stop saving the file, otherwise saving infinitely
+//                
+//                try! newAudio.write(from: buffer)//let's write the buffer result into our file
+//            }else{
+//                self.reverbPlayerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+//                print("Reverb Did you like it? Please, vote up for my question")
+//            }
+//        }
         
         return false
     }
