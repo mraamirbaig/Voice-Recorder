@@ -19,12 +19,12 @@ class EffectsViewController: UIViewController {
     
     var fileName: String!
     
-    var audioEngine: AVAudioEngine!
+    var audioEngine: AVAudioEngine?
     var audioFile: AVAudioFile?
     var buffer: AVAudioPCMBuffer?
     
     //AudioPlayerNodes
-    var normalPlayerNode = AVAudioPlayerNode()                       //normal
+    var normalPlayerNode = AVAudioPlayerNode()                     //normal
     var echoPlayerNode = AVAudioPlayerNode()                       //echo
     var reverbPlayerNode = AVAudioPlayerNode()                     //reverb
     
@@ -32,8 +32,6 @@ class EffectsViewController: UIViewController {
     var normalPlayerNodeVolume: Float!
     var echoPlayerNodeVolume: Float!
     var reverbPlayerNodeVolume: Float!
-    
-    let audioMixer = AVAudioMixerNode()
     
     var showAlertService: ShowAlertService!
     let documentsDirectoryService = DocumentsDirectoryService()
@@ -50,8 +48,89 @@ class EffectsViewController: UIViewController {
             playNavBtnItem.isEnabled = false
             showAlertService.showAlertWithAlertTitle(title: "Cant play", alertMessage: "No file to play.", actionTitle: "Ok")
         }
+    }
+    
+    func resetAllEffects() {
         
+        print("All effects are reset.")
+        //Echo slider
+        normalPlayerNodeVolume = 1.0
+        normalPlayerNode.volume = normalPlayerNodeVolume
         
+        //Reset echo effect
+        echoPlayerNodeVolume = 0.0
+        echoPlayerNode.volume = echoPlayerNodeVolume
+        echoSlider.setValue(echoPlayerNodeVolume, animated: true)
+        
+        //Reset reverb effect
+        reverbPlayerNodeVolume = 0.0
+        reverbPlayerNode.volume = 0.0
+        reverbSlider.setValue(0.0, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAudio()
+    }
+    
+    
+    @IBAction func resetAllNavItemAction(_ sender: Any) {
+        resetAllEffects()
+    }
+    
+    @IBAction func playNavBtnItemAction(_ sender: Any) {
+        
+        togglePlayStopBtn()
+    }
+    
+    func togglePlayStopBtn() {
+        
+        if playNavBtnItem.title == PLAY_BTN_TITLE.PLAY {
+            playAudio()
+        }else{
+            stopAudio()
+        }
+    }
+    
+    func playAudio() {
+        
+        if reInitializeAudioEngine() {
+            playAllAudioPlayerNodes()
+            playNavBtnItem.title = PLAY_BTN_TITLE.STOP
+        }else{
+            playNavBtnItem.isEnabled = false
+            showAlertService.showAlertWithAlertTitle(title: "SetUp failed", alertMessage: "Failed to setup player. Please try again later.", actionTitle: "Ok")
+        }
+    }
+    
+    func reInitializeAudioEngine() -> Bool {
+        
+        buffer = createBufferForFileName(fileName)
+        
+        if buffer != nil {
+            
+            let audioSession = AVAudioSession.sharedInstance()
+            try? audioSession.setCategory(
+                AVAudioSessionCategoryPlayback)
+            
+            audioEngine = AVAudioEngine()
+            
+            normalPlayerNode = AVAudioPlayerNode()
+            normalPlayerNode.volume = normalPlayerNodeVolume
+            
+            echoPlayerNode = AVAudioPlayerNode()
+            echoPlayerNode.volume = echoPlayerNodeVolume
+            
+            reverbPlayerNode = AVAudioPlayerNode()
+            reverbPlayerNode.volume = reverbPlayerNodeVolume
+            
+            attachAllNodesToAudioEngineWithBuffer(buffer!)
+            
+            audioEngine!.prepare()
+            try! audioEngine!.start()
+            return true
+        }
+        return false
     }
     
     func createBufferForFileName(_ fileName: String) -> AVAudioPCMBuffer? {
@@ -69,12 +148,9 @@ class EffectsViewController: UIViewController {
     
     func attachAllNodesToAudioEngineWithBuffer(_ buffer: AVAudioPCMBuffer) {
         
-        attachNormalEffectToAudioEngine(audioEngine, buffer: buffer)
-        attachEchoEffectToAudioEngine(audioEngine, buffer: buffer)
-        attachReverbEffectToAudioEngine(audioEngine, buffer: buffer)
-        
-        audioEngine.prepare()
-        try! audioEngine.start()
+        attachNormalEffectToAudioEngine(audioEngine!, buffer: buffer)
+        attachEchoEffectToAudioEngine(audioEngine!, buffer: buffer)
+        attachReverbEffectToAudioEngine(audioEngine!, buffer: buffer)
     }
     
     func attachNormalEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
@@ -115,85 +191,6 @@ class EffectsViewController: UIViewController {
         audioEngine.connect(reverbPlayerNode, to:reverb, format: buffer.format)
         audioEngine.connect(reverb, to:audioEngine.mainMixerNode, format:buffer.format)
         reverbPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
-    }
-    
-    func attachMixerToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
-        audioEngine.attach(audioMixer)
-        
-        audioEngine.connect(audioMixer, to: audioEngine.outputNode, format: nil)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopAudio()
-    }
-    
-    func resetAllEffects() {
-        
-        print("All effects are reset.")
-        //Echo slider
-        normalPlayerNodeVolume = 1.0
-        normalPlayerNode.volume = normalPlayerNodeVolume
-        
-        //Reset echo effect
-        echoPlayerNodeVolume = 0.0
-        echoPlayerNode.volume = echoPlayerNodeVolume
-        echoSlider.setValue(echoPlayerNodeVolume, animated: true)
-        
-        //Reset reverb effect
-        reverbPlayerNodeVolume = 0.0
-        reverbPlayerNode.volume = 0.0
-        reverbSlider.setValue(0.0, animated: true)
-    }
-    
-    @IBAction func resetAllNavItemAction(_ sender: Any) {
-        resetAllEffects()
-    }
-    
-    @IBAction func playNavBtnItemAction(_ sender: Any) {
-        
-        togglePlayStopBtn()
-    }
-    
-    func togglePlayStopBtn() {
-        
-        if playNavBtnItem.title == PLAY_BTN_TITLE.PLAY {
-            playAudio()
-        }else{
-            stopAudio()
-        }
-    }
-    
-    func playAudio() {
-        
-        reInitializeAudioEngine()
-        
-        playAllAudioPlayerNodes()
-        playNavBtnItem.title = PLAY_BTN_TITLE.STOP
-    }
-    
-    func reInitializeAudioEngine() {
-        
-        buffer = createBufferForFileName(fileName)
-        
-        if buffer != nil {
-            
-            let audioSession = AVAudioSession.sharedInstance()
-            try? audioSession.setCategory(
-                AVAudioSessionCategoryPlayback)
-            audioEngine = AVAudioEngine()
-            
-            normalPlayerNode = AVAudioPlayerNode()
-            normalPlayerNode.volume = normalPlayerNodeVolume
-            
-            echoPlayerNode = AVAudioPlayerNode()
-            echoPlayerNode.volume = echoPlayerNodeVolume
-            
-            reverbPlayerNode = AVAudioPlayerNode()
-            reverbPlayerNode.volume = reverbPlayerNodeVolume
-            
-            attachAllNodesToAudioEngineWithBuffer(buffer!)
-        }
     }
     
     func playAllAudioPlayerNodes() {
@@ -239,84 +236,49 @@ class EffectsViewController: UIViewController {
     
     func saveAudioEffects() {
         
-        playAllAudioPlayerNodes()
-        let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-                                                                            AVEncoderBitRateKey: 16,
-                                                                            AVNumberOfChannelsKey: 2,
-                                                                            AVSampleRateKey: 44100.0])
-        
-        let length = self.audioFile!.length
-        
-        
-        audioEngine.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine.mainMixerNode.inputFormat(forBus: 0)) {
-            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+        if audioEngine != nil {
             
-            
-            print(newAudio.length)
-            print("=====================")
-            print(length)
-            print("**************************")
-            
-            if (newAudio.length) < length {//Let us know when to stop saving the file, otherwise saving infinitely
-                
-                do{
-                    //print(buffer)
-                    try newAudio.write(from: buffer)
-                }catch _{
-                    print("Problem Writing Buffer")
-                }
-            }else{
-                self.audioEngine.mainMixerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
-                
-                //DO WHAT YOU WANT TO DO HERE WITH EFFECTED AUDIO
-                self.stopAllAudioPlayerNodes()
-                
+            if playNavBtnItem.title == PLAY_BTN_TITLE.STOP {
+                stopAudio()
             }
-   
-
-        //Your new file on which you want to save some changed audio, and prepared to be bufferd in some new data...
-        
-        //Now install a Tap on the output bus to "record" the transformed file on a our newAudio file. 
-        
-//        normalPlayerNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: buffer!.format){
-//            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
-//            
-//            if (newAudio.length) < ( self.audioFile!.length){//Let us know when to stop saving the file, otherwise saving infinitely
-//                
-//                try! newAudio.write(from: buffer)//let's write the buffer result into our file
-//                
-//            }else{
-//                self.normalPlayerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
-//                print("Normal Did you like it? Please, vote up for my question")
-//            }
-//        }
-//
-//        echoPlayerNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: buffer!.format){
-//            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
-//            
-//            if (newAudio.length) < ( self.audioFile!.length){//Let us know when to stop saving the file, otherwise saving infinitely
-//                
-//                try! newAudio.write(from: buffer)//let's write the buffer result into our file
-//                
-//            }else{
-//                self.echoPlayerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
-//                print("Echo Did you like it? Please, vote up for my question")
-//            }
-//        }
-//
-//        reverbPlayerNode.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(audioFile!.length)), format: buffer!.format){
-//            (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
-//            
-//            if (newAudio.length) < ( self.audioFile!.length){//Let us know when to stop saving the file, otherwise saving infinitely
-//                
-//                try! newAudio.write(from: buffer)//let's write the buffer result into our file
-//            }else{
-//                self.reverbPlayerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
-//                print("Reverb Did you like it? Please, vote up for my question")
-//            }
-//        }
+            
+            reInitializeAudioEngine()
+            //playAllAudioPlayerNodes()
+            let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
+                                                                                                                                  AVEncoderBitRateKey: 16,
+                                                                                                                                  AVNumberOfChannelsKey: 2,
+                                                                                                                                  AVSampleRateKey: 44100.0])
+            
+            let length = self.audioFile!.length
+            
+            
+            audioEngine!.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine!.mainMixerNode.inputFormat(forBus: 0)) {
+                (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                
+                
+                print(newAudio.length)
+                print("=====================")
+                print(length)
+                print("**************************")
+                
+                if (newAudio.length) < length {//Let us know when to stop saving the file, otherwise saving infinitely
+                    
+                    do{
+                        print(buffer)
+                        try newAudio.write(from: buffer)
+                    }catch _{
+                        print("Problem Writing Buffer")
+                    }
+                }else{
+                    self.audioEngine!.mainMixerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+                    
+                    //DO WHAT YOU WANT TO DO HERE WITH EFFECTED AUDIO
+                    self.stopAllAudioPlayerNodes()
+                }
+            }
+        }else {
+            showAlertService.showAlertWithAlertTitle(title: "", alertMessage: "Please play and test the audio before saving the effects.", actionTitle: "Ok")
         }
-
     }
     
     /*
