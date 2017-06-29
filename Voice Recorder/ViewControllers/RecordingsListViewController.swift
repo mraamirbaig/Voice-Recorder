@@ -50,7 +50,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     
     func getRecordingListNames() -> [String]? {
         
-        return documentsDirectoryService.getAllRecordingFileNames()
+        return documentsDirectoryService.getAllRecordingFileNames(isAccending: false)
     }
     
     func enableDisableEditBtn() {
@@ -245,6 +245,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     
     func deleteFileOfFileName(_ fileName: String) -> Bool {
         
+        stopPlayer()
         if self.documentsDirectoryService.deleteFileOfFileName (fileName) {
             return true
         }

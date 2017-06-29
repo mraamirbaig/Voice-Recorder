@@ -39,7 +39,7 @@ class DocumentsDirectoryService {
         return nil
     }
     
-    func getAllRecordingFileNames() -> [String]? {
+    func getAllRecordingFileNames(isAccending:Bool) -> [String]? {
         
         if let files = getAllFiles() {
             var fileNames = [String]()
@@ -48,7 +48,12 @@ class DocumentsDirectoryService {
                     fileNames.append(fileNameStr)
                 }
             }
-            return fileNames
+            
+            if isAccending == true {
+                return fileNames.sorted{$0 < $1}
+            }else {
+                return fileNames.sorted{$0 > $1}
+            }
         }
         return nil
     }
