@@ -174,12 +174,13 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         
         if indexPathOfPlayingCell != nil {
             if indexPathOfPlayingCell == indexPath {
-                cell.stopImgView.isHidden = false
+                cell.stopImgView.image = UIImage.init(named: "Stop")
             }else{
-                cell.stopImgView.isHidden = true
+                cell.stopImgView.image = UIImage.init(named: "Play")
+                
             }
         }else{
-            cell.stopImgView.isHidden = true
+            cell.stopImgView.image = UIImage.init(named: "Play")
         }
         
         return cell
@@ -313,7 +314,11 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func setCellAsIsStopped(_ isStopped: Bool, atIndexPath indexPath: IndexPath)  {
         
         let cell = recordingsListTableView.cellForRow(at: indexPath) as! RecordingListCell
-        cell.stopImgView.isHidden = isStopped
+        if isStopped == false {
+            cell.stopImgView.image = UIImage.init(named: "Stop")
+        }else {
+            cell.stopImgView.image = UIImage.init(named: "Play")
+        }
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

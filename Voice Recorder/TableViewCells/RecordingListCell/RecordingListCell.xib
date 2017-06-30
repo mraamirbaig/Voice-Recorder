@@ -23,12 +23,11 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19t-UW-adZ">
                         <rect key="frame" x="8" y="8" width="127.5" height="27.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
+                        <color key="textColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EGq-w2-JkN">
-                        <rect key="frame" x="339.5" y="8" width="27.5" height="27.5"/>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Play" translatesAutoresizingMaskIntoConstraints="NO" id="EGq-w2-JkN">
+                        <rect key="frame" x="323.5" y="8" width="27.5" height="27.5"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="EGq-w2-JkN" secondAttribute="height" multiplier="1:1" id="kAq-Z2-CPX"/>
                         </constraints>
@@ -36,7 +35,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="19t-UW-adZ" secondAttribute="bottom" id="Nsv-ff-3oB"/>
-                    <constraint firstAttribute="trailing" secondItem="EGq-w2-JkN" secondAttribute="trailing" constant="8" id="NwG-rZ-niM"/>
+                    <constraint firstAttribute="trailing" secondItem="EGq-w2-JkN" secondAttribute="trailing" constant="24" id="NwG-rZ-niM"/>
                     <constraint firstItem="EGq-w2-JkN" firstAttribute="top" secondItem="WjA-u2-kMY" secondAttribute="top" constant="8" id="aSN-5q-69Q"/>
                     <constraint firstItem="19t-UW-adZ" firstAttribute="leading" secondItem="WjA-u2-kMY" secondAttribute="leadingMargin" id="imQ-sI-Y5v"/>
                     <constraint firstAttribute="bottom" secondItem="EGq-w2-JkN" secondAttribute="bottom" constant="8" id="oEF-NU-jJ7"/>
@@ -50,4 +49,7 @@
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="Play" width="44" height="44"/>
+    </resources>
 </document>

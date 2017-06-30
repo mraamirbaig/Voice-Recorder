@@ -10,12 +10,15 @@ import UIKit
 import AVFoundation
 
 
-class EffectsViewController: UIViewController {
+class AddEffectsViewController: UIViewController {
     
     @IBOutlet weak var playNavBtnItem: UIBarButtonItem!
+    
     //Sliders
     @IBOutlet weak var echoSlider: UISlider!
-    @IBOutlet weak var reverbSlider: UISlider!
+    @IBOutlet weak var distortionSlider: UISlider!
+    @IBOutlet weak var hallSlider: UISlider!
+    @IBOutlet weak var smallRoomSlider: UISlider!
     
     var fileName: String!
     
@@ -26,15 +29,26 @@ class EffectsViewController: UIViewController {
     //AudioPlayerNodes
     var normalPlayerNode = AVAudioPlayerNode()                     //normal
     var echoPlayerNode = AVAudioPlayerNode()                       //echo
-    var reverbPlayerNode = AVAudioPlayerNode()                     //reverb
+    var distortionPlayerNode = AVAudioPlayerNode()                     //reverb
+    var hallPlayerNode = AVAudioPlayerNode()                     //hall
+    var smallRoomPlayerNode = AVAudioPlayerNode()                     //hall
     
     //AudioPlayerNodes volumes
     var normalPlayerNodeVolume: Float!
     var echoPlayerNodeVolume: Float!
-    var reverbPlayerNodeVolume: Float!
+    var distortionPlayerNodeVolume: Float!
+    var hallPlayerNodeVolume: Float!
+    var smallRoomPlayerNodeVolume: Float!
     
     var showAlertService: ShowAlertService!
     let documentsDirectoryService = DocumentsDirectoryService()
+    
+    static func getInstanceForFileName(_ fileName: String) -> AddEffectsViewController {
+        
+        let effectsViewController = AddEffectsViewController.init(nibName: "AddEffectsViewController", bundle: Bundle.init(for: RecordViewController.self))
+        effectsViewController.fileName = fileName
+        return effectsViewController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,10 +76,20 @@ class EffectsViewController: UIViewController {
         echoPlayerNode.volume = echoPlayerNodeVolume
         echoSlider.setValue(echoPlayerNodeVolume, animated: true)
         
-        //Reset reverb effect
-        reverbPlayerNodeVolume = 0.0
-        reverbPlayerNode.volume = 0.0
-        reverbSlider.setValue(0.0, animated: true)
+        //Reset distortion effect
+        distortionPlayerNodeVolume = 0.0
+        distortionPlayerNode.volume = 0.0
+        distortionSlider.setValue(0.0, animated: true)
+        
+        //Reset hall effect
+        hallPlayerNodeVolume = 0.0
+        hallPlayerNode.volume = 0.0
+        hallSlider.setValue(0.0, animated: true)
+        
+        //Reset small room effect
+        smallRoomPlayerNodeVolume = 0.0
+        smallRoomPlayerNode.volume = 0.0
+        smallRoomSlider.setValue(0.0, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -85,7 +109,7 @@ class EffectsViewController: UIViewController {
     
     func togglePlayStopBtn() {
         
-        if playNavBtnItem.title == PLAY_BTN_TITLE.PLAY {
+        if playNavBtnItem.tag == 0 {
             playAudio()
         }else{
             stopAudio()
@@ -96,7 +120,9 @@ class EffectsViewController: UIViewController {
         
         if reInitializeAudioEngine() {
             playAllAudioPlayerNodes()
-            playNavBtnItem.title = PLAY_BTN_TITLE.STOP
+            playNavBtnItem.tag = 1
+            playNavBtnItem.image = UIImage(named: "Stop")
+
         }else{
             playNavBtnItem.isEnabled = false
             showAlertService.showAlertWithAlertTitle(title: "SetUp failed", alertMessage: "Failed to setup player. Please try again later.", actionTitle: "Ok")
@@ -121,9 +147,14 @@ class EffectsViewController: UIViewController {
             echoPlayerNode = AVAudioPlayerNode()
             echoPlayerNode.volume = echoPlayerNodeVolume
             
-            reverbPlayerNode = AVAudioPlayerNode()
-            reverbPlayerNode.volume = reverbPlayerNodeVolume
+            distortionPlayerNode = AVAudioPlayerNode()
+            distortionPlayerNode.volume = distortionPlayerNodeVolume
             
+            hallPlayerNode = AVAudioPlayerNode()
+            hallPlayerNode.volume = hallPlayerNodeVolume
+            
+            smallRoomPlayerNode = AVAudioPlayerNode()
+            smallRoomPlayerNode.volume = smallRoomPlayerNodeVolume
             attachAllNodesToAudioEngineWithBuffer(buffer!)
             
             audioEngine!.prepare()
@@ -150,7 +181,9 @@ class EffectsViewController: UIViewController {
         
         attachNormalEffectToAudioEngine(audioEngine!, buffer: buffer)
         attachEchoEffectToAudioEngine(audioEngine!, buffer: buffer)
-        attachReverbEffectToAudioEngine(audioEngine!, buffer: buffer)
+        attachDistortionEffectToAudioEngine(audioEngine!, buffer: buffer)
+        attachHallEffectToAudioEngine(audioEngine!, buffer: buffer)
+        attachSmallRoomEffectToAudioEngine(audioEngine!, buffer: buffer)
     }
     
     func attachNormalEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
@@ -180,55 +213,100 @@ class EffectsViewController: UIViewController {
         echoPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
     }
     
-    func attachReverbEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+    func attachDistortionEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
         
-        let reverb = AVAudioUnitReverb()
-        reverb.loadFactoryPreset(AVAudioUnitReverbPreset.largeHall)
-        reverb.wetDryMix = 100
+        let distortion = AVAudioUnitDistortion()
+        distortion.loadFactoryPreset(.speechCosmicInterference)
+        distortion.preGain = -2
+        distortion.wetDryMix = 100
         
-        audioEngine.attach(reverbPlayerNode)
-        audioEngine.attach(reverb)
-        audioEngine.connect(reverbPlayerNode, to:reverb, format: buffer.format)
-        audioEngine.connect(reverb, to:audioEngine.mainMixerNode, format:buffer.format)
-        reverbPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
+        audioEngine.attach(distortionPlayerNode)
+        audioEngine.attach(distortion)
+        audioEngine.connect(distortionPlayerNode, to:distortion, format: buffer.format)
+        audioEngine.connect(distortion, to:audioEngine.mainMixerNode, format:buffer.format)
+        distortionPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
+    }
+    
+    func attachHallEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+        
+        let hall = AVAudioUnitReverb()
+        hall.loadFactoryPreset(.largeHall)
+        hall.wetDryMix = 100
+        
+        audioEngine.attach(hallPlayerNode)
+        audioEngine.attach(hall)
+        audioEngine.connect(hallPlayerNode, to:hall, format: buffer.format)
+        audioEngine.connect(hall, to:audioEngine.mainMixerNode, format:buffer.format)
+        hallPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
+    }
+    
+    func attachSmallRoomEffectToAudioEngine(_ audioEngine: AVAudioEngine,  buffer: AVAudioPCMBuffer) {
+        
+        let smallRoom = AVAudioUnitReverb()
+        smallRoom.loadFactoryPreset(.smallRoom)
+        smallRoom.wetDryMix = 100
+        
+        audioEngine.attach(smallRoomPlayerNode)
+        audioEngine.attach(smallRoom)
+        audioEngine.connect(smallRoomPlayerNode, to:smallRoom, format: buffer.format)
+        audioEngine.connect(smallRoom, to:audioEngine.mainMixerNode, format:buffer.format)
+        smallRoomPlayerNode.scheduleBuffer(buffer, at:nil, options: AVAudioPlayerNodeBufferOptions.loops, completionHandler: nil)
     }
     
     func playAllAudioPlayerNodes() {
         
         normalPlayerNode.play()
         echoPlayerNode.play()
-        reverbPlayerNode.play()
+        distortionPlayerNode.play()
+        hallPlayerNode.play()
+        smallRoomPlayerNode.play()
     }
     
     func stopAudio() {
         
         stopAllAudioPlayerNodes()
-        playNavBtnItem.title = PLAY_BTN_TITLE.PLAY
+        playNavBtnItem.tag = 0
+        playNavBtnItem.image = UIImage(named: "Play")
     }
     
     func stopAllAudioPlayerNodes() {
         
         normalPlayerNode.stop()
         echoPlayerNode.stop()
-        reverbPlayerNode.stop()
+        distortionPlayerNode.stop()
+        hallPlayerNode.stop()
+        smallRoomPlayerNode.stop()
     }
     
     @IBAction func echoSliderValueChanged(_ sender: Any) {
         
         echoPlayerNodeVolume = echoSlider.value
         echoPlayerNode.volume = echoPlayerNodeVolume
-        normalPlayerNode.volume = 1 - echoPlayerNodeVolume - reverbPlayerNodeVolume
+        normalPlayerNode.volume = 1 - echoPlayerNodeVolume - distortionPlayerNodeVolume - hallPlayerNodeVolume - smallRoomPlayerNodeVolume
     }
     
-    @IBAction func reverbSliderValueChanged(_ sender: Any) {
+    @IBAction func distortionSliderValueChanged(_ sender: Any) {
         
-        reverbPlayerNodeVolume = reverbSlider.value
-        reverbPlayerNode.volume = reverbPlayerNodeVolume
-        normalPlayerNode.volume = 1 - reverbPlayerNodeVolume - echoPlayerNodeVolume
+        distortionPlayerNodeVolume = distortionSlider.value
+        distortionPlayerNode.volume = distortionPlayerNodeVolume
+        normalPlayerNode.volume = 1 - distortionPlayerNodeVolume - echoPlayerNodeVolume - hallPlayerNodeVolume - smallRoomPlayerNodeVolume
     }
     
+    @IBAction func hallSliderValueChanged(_ sender: Any) {
+        
+        hallPlayerNodeVolume = hallSlider.value
+        hallPlayerNode.volume = hallPlayerNodeVolume
+        normalPlayerNode.volume = 1 - hallPlayerNodeVolume - echoPlayerNodeVolume - distortionPlayerNodeVolume - smallRoomPlayerNodeVolume
+    }
     
-    @IBAction func saveNavBtnItem(_ sender: Any) {
+    @IBAction func smallRoomSliderValueChanged(_ sender: Any) {
+        
+        smallRoomPlayerNodeVolume = smallRoomSlider.value
+        smallRoomPlayerNode.volume = smallRoomPlayerNodeVolume
+        normalPlayerNode.volume = 1 - smallRoomPlayerNodeVolume - echoPlayerNodeVolume - distortionPlayerNodeVolume - hallPlayerNodeVolume
+    }
+    
+    @IBAction func saveNavBtnItemAction(_ sender: Any) {
         
         //stopAudio()
         saveAudioEffects()
@@ -238,23 +316,19 @@ class EffectsViewController: UIViewController {
         
         if audioEngine != nil {
             
-            if playNavBtnItem.title == PLAY_BTN_TITLE.STOP {
+            if playNavBtnItem.tag == 1 {
                 stopAudio()
             }
             
             reInitializeAudioEngine()
             playAllAudioPlayerNodes()
+            
             let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-                                                                                                                                  AVEncoderBitRateKey: 16,
-                                                                                                                                  AVNumberOfChannelsKey: 2,
-                                                                                                                                  AVSampleRateKey: 44100.0])
+                                                       AVEncoderBitRateKey: 16,                                                                         AVNumberOfChannelsKey: 2,                                                    AVSampleRateKey: 44100.0])
             
-            let length = self.audioFile!.length
-            
-            
-            audioEngine!.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine!.mainMixerNode.inputFormat(forBus: 0)) {
+            let length = self.audioFile!.length 
+            audioEngine!.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine!.mainMixerNode.outputFormat(forBus: 0)) {
                 (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                
                 
                 print(newAudio.length)
                 print("=====================")
@@ -273,7 +347,11 @@ class EffectsViewController: UIViewController {
                     self.audioEngine!.mainMixerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
                     
                     //DO WHAT YOU WANT TO DO HERE WITH EFFECTED AUDIO
-                    self.stopAllAudioPlayerNodes()
+                    
+                     self.stopAllAudioPlayerNodes()
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
         }else {
