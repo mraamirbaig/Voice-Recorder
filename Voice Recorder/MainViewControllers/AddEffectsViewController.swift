@@ -52,7 +52,7 @@ class AddEffectsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         showAlertService = ShowAlertService.init(onViewController: self)
         
@@ -122,7 +122,7 @@ class AddEffectsViewController: UIViewController {
             playAllAudioPlayerNodes()
             playNavBtnItem.tag = 1
             playNavBtnItem.image = UIImage(named: "Stop")
-
+            
         }else{
             playNavBtnItem.isEnabled = false
             showAlertService.showAlertWithAlertTitle(title: "SetUp failed", alertMessage: "Failed to setup player. Please try again later.", actionTitle: "Ok")
@@ -308,7 +308,6 @@ class AddEffectsViewController: UIViewController {
     
     @IBAction func saveNavBtnItemAction(_ sender: Any) {
         
-        //stopAudio()
         saveAudioEffects()
     }
     
@@ -320,39 +319,44 @@ class AddEffectsViewController: UIViewController {
                 stopAudio()
             }
             
-            reInitializeAudioEngine()
-            playAllAudioPlayerNodes()
-            
-            let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-                                                       AVEncoderBitRateKey: 16,                                                                         AVNumberOfChannelsKey: 2,                                                    AVSampleRateKey: 44100.0])
-            
-            let length = self.audioFile!.length 
-            audioEngine!.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine!.mainMixerNode.outputFormat(forBus: 0)) {
-                (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+            if reInitializeAudioEngine() {
+                playAllAudioPlayerNodes()
                 
-                print(newAudio.length)
-                print("=====================")
-                print(length)
-                print("**************************")
+                let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
+                                                                                                                                      AVEncoderBitRateKey: 16,                                                                         AVNumberOfChannelsKey: 2,                                                    AVSampleRateKey: 44100.0])
                 
-                if (newAudio.length) < length {//Let us know when to stop saving the file, otherwise saving infinitely
+                let length = self.audioFile!.length
+                audioEngine!.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine!.mainMixerNode.outputFormat(forBus: 0)) {
+                    (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
                     
-                    do{
-                        print(buffer)
-                        try newAudio.write(from: buffer)
-                    }catch _{
-                        print("Problem Writing Buffer")
-                    }
-                }else{
-                    self.audioEngine!.mainMixerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+                    print(newAudio.length)
+                    print("=====================")
+                    print(length)
+                    print("**************************")
                     
-                    //DO WHAT YOU WANT TO DO HERE WITH EFFECTED AUDIO
-                    
-                     self.stopAllAudioPlayerNodes()
-                    DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
+                    if (newAudio.length) < length {//Let us know when to stop saving the file, otherwise saving infinitely
+                        
+                        do{
+                            print(buffer)
+                            try newAudio.write(from: buffer)
+                        }catch _{
+                            print("Problem Writing Buffer")
+                        }
+                    }else{
+                        self.audioEngine!.mainMixerNode.removeTap(onBus: 0)//if we dont remove it, will keep on tapping infinitely
+                        
+                        //DO WHAT YOU WANT TO DO HERE WITH EFFECTED AUDIO
+                        
+                        
+                        DispatchQueue.main.async {
+                            self.stopAllAudioPlayerNodes()
+                            self.audioEngine!.stop()
+                            self.navigationController?.popViewController(animated: true)
+                        }
                     }
                 }
+            }else {
+                showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to save effects. Please try again.", actionTitle: "Ok")
             }
         }else {
             showAlertService.showAlertWithAlertTitle(title: "", alertMessage: "Please play and test the audio before saving the effects.", actionTitle: "Ok")
@@ -360,13 +364,13 @@ class AddEffectsViewController: UIViewController {
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
