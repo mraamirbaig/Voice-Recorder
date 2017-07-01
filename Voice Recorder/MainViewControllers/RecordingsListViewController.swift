@@ -9,24 +9,17 @@
 import UIKit
 import AVFoundation
 
-struct EDIT_BTN_TITLE {
-    static let EDIT = "Edit"
-    static let DONE = "Done"
-}
-
 class RecordingsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, AVAudioRecorderDelegate, AVAudioPlayerDelegate, UISearchBarDelegate {
-    
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var recordingsListTableView: UITableView!
     
     @IBOutlet weak var editNavBtn: UIBarButtonItem!
     
-    
     let audioSession = AVAudioSession.sharedInstance()
     var soundPlayer : AVAudioPlayer!
-    var recordingsListNames = [String]()
-    var filteredRecordingsListNames = [String]()
+    var allRecordingAudioFiles = [AudioFile]()
+    var filteredRecordingAudioFiles = [AudioFile]()
     
     let documentsDirectoryService = DocumentsDirectoryService()
     var showAlertService: ShowAlertService!
@@ -42,19 +35,19 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         recordingsListTableView.register(UINib.init(nibName: "RecordingListCell", bundle: Bundle.init(for: RecordingListCell.self)), forCellReuseIdentifier: "RecordingListCellIdentifier")
         
         showAlertService = ShowAlertService.init(onViewController: self)
-        if let recordingListNames = getRecordingListNames() {
-            recordingsListNames = recordingListNames
+        if let allRecordingAudioFiles = getAllRecordingAudioFiles() {
+            self.allRecordingAudioFiles = allRecordingAudioFiles
         }
         self.enableDisableEditBtn()
     }
     
-    func getRecordingListNames() -> [String]? {
+    private func getAllRecordingAudioFiles() -> [AudioFile]? {
         
-        return documentsDirectoryService.getAllRecordingFileNames(isAccending: false)
+        return documentsDirectoryService.getAllRecordingAudioFiles(isAccending: false)
     }
     
     func enableDisableEditBtn() {
-        if recordingsListNames.count == 0 {
+        if allRecordingAudioFiles.count == 0 {
             if editNavBtn.title == EDIT_BTN_TITLE.DONE {
                 toggleEditDoneBtn()
             }
@@ -66,8 +59,8 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     
     func reloadRecordingList() {
         
-        if let recordingListNames = getRecordingListNames() {
-            self.recordingsListNames = recordingListNames
+        if let allRecordingAudioFiles = getAllRecordingAudioFiles() {
+            self.allRecordingAudioFiles = allRecordingAudioFiles
             recordingsListTableView.reloadData()
         }
     }
@@ -107,10 +100,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         searchBar.text = ""
         searchBar.endEditing(true)
         searchActive = false
-        if let recordingListNames = getRecordingListNames() {
-            self.recordingsListNames = recordingListNames
-        }
-        self.recordingsListTableView.reloadData()
+        self.reloadRecordingList()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -122,19 +112,19 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         stopPlayer()
-        if let recordingListNames = getRecordingListNames() {
-            self.recordingsListNames = recordingListNames
-        }
-        
-        if searchText.characters.count > 0 {
-            filteredRecordingsListNames = recordingsListNames.filter({ (recordingName) -> Bool in
-                let tmp: NSString = recordingName as NSString
-                let range = tmp.range(of: searchText, options: .caseInsensitive)
-                return range.location != NSNotFound
-            })
-        }else {
-            filteredRecordingsListNames = recordingsListNames
-        }
+//        if let allRecordingAudioFiles = getAllRecordingAudioFiles() {
+//            self.allRecordingAudioFiles = allRecordingAudioFiles
+//        }
+//        
+//        if searchText.characters.count > 0 {
+//            filteredRecordingsListNames = allRecordingAudioFiles.filter({ (recordingName) -> Bool in
+//                let tmp: NSString = recordingName as NSString
+//                let range = tmp.range(of: searchText, options: .caseInsensitive)
+//                return range.location != NSNotFound
+//            })
+//        }else {
+//            filteredRecordingsListNames = recordingsListNames
+//        }
         
         self.recordingsListTableView.reloadData()
     }
@@ -157,27 +147,29 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if searchActive == true {
-            return filteredRecordingsListNames.count
+            return filteredRecordingAudioFiles.count
         }
-        return recordingsListNames.count
+        return allRecordingAudioFiles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordingListCellIdentifier", for: indexPath) as! RecordingListCell
         
+        let audioFile: AudioFile!
         if searchActive == true {
-            cell.recordingNameLbl.text = filteredRecordingsListNames[indexPath.row]
+            audioFile = filteredRecordingAudioFiles[indexPath.row]
         } else {
-            cell.recordingNameLbl.text = recordingsListNames[indexPath.row]
+            audioFile = allRecordingAudioFiles[indexPath.row]
         }
+        cell.recordingNameLbl.text = audioFile.name
+        cell.recordingDurationLbl.text = audioFile.duration
         
         if indexPathOfPlayingCell != nil {
             if indexPathOfPlayingCell == indexPath {
                 cell.stopImgView.image = UIImage.init(named: "Stop")
             }else{
                 cell.stopImgView.image = UIImage.init(named: "Play")
-                
             }
         }else{
             cell.stopImgView.image = UIImage.init(named: "Play")
@@ -208,41 +200,41 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         return true
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
-            
-            let recordingFileNameToBeDeleted: String!
-            if self.searchActive == true {
-                recordingFileNameToBeDeleted = self.filteredRecordingsListNames[indexPath.row]
-            }else{
-                recordingFileNameToBeDeleted = self.recordingsListNames[indexPath.row]
-            }
-            
-            if self.deleteFileOfFileName(recordingFileNameToBeDeleted) {
-                if self.searchActive == true {
-                    self.filteredRecordingsListNames.remove(at: indexPath.row)
-                }else{
-                    self.recordingsListNames.remove(at: indexPath.row)
-                }
-                self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
-                self.enableDisableEditBtn()
-            }
-        }
-        
-        let shareRowAction = UITableViewRowAction.init(style: .normal, title: "Share") { (rowAction, indexPath) in
-            
-            let recordingFileNameToBeShared: String!
-            if self.searchActive == true {
-                recordingFileNameToBeShared = self.filteredRecordingsListNames[indexPath.row]
-            }else{
-                recordingFileNameToBeShared = self.recordingsListNames[indexPath.row]
-            }
-            
-            self.shareFileOfFileName(recordingFileNameToBeShared)
-        }
-        return [deleteRowAction,shareRowAction]
-    }
+//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//        
+//        let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
+//            
+//            let recordingFileNameToBeDeleted: String!
+//            if self.searchActive == true {
+//                recordingFileNameToBeDeleted = self.filteredRecordingsListNames[indexPath.row]
+//            }else{
+//                recordingFileNameToBeDeleted = self.recordingsListNames[indexPath.row]
+//            }
+//            
+//            if self.deleteFileOfFileName(recordingFileNameToBeDeleted) {
+//                if self.searchActive == true {
+//                    self.filteredRecordingsListNames.remove(at: indexPath.row)
+//                }else{
+//                    self.recordingsListNames.remove(at: indexPath.row)
+//                }
+//                self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
+//                self.enableDisableEditBtn()
+//            }
+//        }
+//        
+//        let shareRowAction = UITableViewRowAction.init(style: .normal, title: "Share") { (rowAction, indexPath) in
+//            
+//            let recordingFileNameToBeShared: String!
+//            if self.searchActive == true {
+//                recordingFileNameToBeShared = self.filteredRecordingsListNames[indexPath.row]
+//            }else{
+//                recordingFileNameToBeShared = self.recordingsListNames[indexPath.row]
+//            }
+//            
+//            self.shareFileOfFileName(recordingFileNameToBeShared)
+//        }
+//        return [deleteRowAction,shareRowAction]
+//    }
     
     func deleteFileOfFileName(_ fileName: String) -> Bool {
         
@@ -265,8 +257,8 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     
     func playRecordingAtIndexPath(_ indexPath: IndexPath) {
         
-        let fileName = recordingsListNames[indexPath.row]
-        if setUpPlayerWithFileName(fileName) {
+        let fileName = allRecordingAudioFiles[indexPath.row].name
+        if setUpPlayerWithFileName(fileName!) {
             indexPathOfPlayingCell = indexPath
             setCellAsIsStopped(false, atIndexPath: indexPath)
             soundPlayer.play()

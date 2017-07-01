@@ -11,6 +11,7 @@ import UIKit
 class RecordingListCell: UITableViewCell {
 
     @IBOutlet weak var recordingNameLbl: UILabel!
+    @IBOutlet weak var recordingDurationLbl: UILabel!
     @IBOutlet weak var stopImgView: UIImageView!
     
     override func awakeFromNib() {

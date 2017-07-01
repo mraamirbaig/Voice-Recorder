@@ -45,13 +45,30 @@
                                     <action selector="playBtnAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kXD-g3-3LE"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crX-t5-tUu">
+                                <rect key="frame" x="8" y="543" width="359" height="40"/>
+                                <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="bcB-kL-E01"/>
+                                </constraints>
+                                <state key="normal" title="Amazon Link">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="amazonLinkBtnAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8hE-TU-clF"/>
+                                    <action selector="resetAllNavItemAction:" destination="pHc-d7-cbi" eventType="touchUpInside" id="Pto-Jw-Z64"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="08e-nM-UWT"/>
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="centerX" secondItem="9tz-qE-yft" secondAttribute="centerX" id="1TU-bI-NQ7"/>
+                            <constraint firstItem="crX-t5-tUu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="5gz-ZT-rra"/>
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="top" secondItem="9tz-qE-yft" secondAttribute="bottom" constant="24" id="KhL-tJ-0KR"/>
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-70" id="fLW-Hu-3gv"/>
+                            <constraint firstAttribute="trailing" secondItem="crX-t5-tUu" secondAttribute="trailing" constant="8" id="iOW-0P-CNA"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="crX-t5-tUu" secondAttribute="bottom" constant="20" id="nIl-eK-xGE"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -144,7 +161,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uWc-OU-kw2" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="dbT-Jt-AEo">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="dbT-Jt-AEo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

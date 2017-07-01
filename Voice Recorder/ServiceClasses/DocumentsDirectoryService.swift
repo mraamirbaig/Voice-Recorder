@@ -7,7 +7,8 @@
 //
 
 import Foundation
-
+import AVFoundation
+import CoreMedia
 
 class DocumentsDirectoryService {
     
@@ -30,32 +31,53 @@ class DocumentsDirectoryService {
         return searchPath
     }
     
-    func getAllFiles() -> FileManager.DirectoryEnumerator? {
+    func getAllFileNames() -> [String]? {
+        
         if let searchPath = getSearchPath() {
-            
-            let fileManager = FileManager.default
-            return fileManager.enumerator(atPath: searchPath)
+            return try? FileManager.default.contentsOfDirectory(atPath: searchPath)
         }
         return nil
     }
     
-    func getAllRecordingFileNames(isAccending:Bool) -> [String]? {
+    func getAllRecordingAudioFiles(isAccending:Bool) -> [AudioFile]? {
         
-        if let files = getAllFiles() {
-            var fileNames = [String]()
-            while let filename = files.nextObject() {
-                if let fileNameStr = filename as? String {
-                    fileNames.append(fileNameStr)
+        if let fileNames = getAllFileNames() {
+            var audioFiles = [AudioFile]()
+            for fileName in fileNames {
+                
+                if let searchPathURL = getSearchFilePathURLForFileName(fileName){
+                    let audioFile = AudioFile.init(name: fileName)
+                    audioFile.fileURL = searchPathURL
+                    audioFile.duration = getDurationOfAudioFileWithURL(searchPathURL)
+                    audioFiles.append(audioFile)
                 }
             }
             
             if isAccending == true {
-                return fileNames.sorted{$0 < $1}
+                return audioFiles.sorted{$0.name < $1.name}
             }else {
-                return fileNames.sorted{$0 > $1}
+                return audioFiles.sorted{$0.name > $1.name}
             }
         }
         return nil
+    }
+    
+    func getDurationOfAudioFileWithURL(_ url: URL) -> String {
+        
+        let asset = AVURLAsset.init(url: url)
+        let audioDuration = asset.duration
+        return durationStringFromCMTime(audioDuration, withFormat: "HH:mm:ss")
+    }
+    
+    func durationStringFromCMTime(_ cmTime: CMTime, withFormat format: String) -> String {
+        
+        let seconds = CMTimeGetSeconds(cmTime)
+        let date = Date.init(timeIntervalSinceNow: seconds)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: date)
     }
     
     func deleteFileOfFileName(_ fileName: String) -> Bool {

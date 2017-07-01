@@ -14,7 +14,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     let audioSession = AVAudioSession.sharedInstance()
     var soundRecorder : AVAudioRecorder!
     var soundPlayer : AVAudioPlayer!
-    var fileName: String?
+    var audioFile: AudioFile?
     
     var audioIsPlaying = false
     
@@ -37,7 +37,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         if recordAndStopBtn.tag == 0 {
             let newDateTimeFileName = getNewDateTimeFileName()
             if setUpRecorderWithFileName(newDateTimeFileName) {
-                fileName = newDateTimeFileName
+                audioFile = AudioFile.init(name: newDateTimeFileName)
                 startRecording()
             }else{
                 showAlertService.showAlertWithAlertTitle(title: "Failed", alertMessage: "Failed to to setup recorder. Please try again.", actionTitle: "Ok")
@@ -103,9 +103,9 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     }
     
     @IBAction func playBtnAction(_ sender: Any) {
-        if fileName != nil {
+        if audioFile != nil {
             if playBtn.tag == 0{
-                playRecordingWithFileName(fileName!)
+                playRecordingWithFileName(audioFile!.name)
             }else{
                 stopPlayer()
             }
@@ -198,7 +198,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         
         if identifier == "AddEffectsViewControllerSegue" {
-            if fileName != nil {
+            if audioFile != nil {
                 return true
             }else{
                 showAlertService.showAlertWithAlertTitle(title: "No recording found", alertMessage: "Please record and then add effects to it.", actionTitle: "Ok")
@@ -217,9 +217,18 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let addEffectsViewController = segue.destination as? AddEffectsViewController {
-            addEffectsViewController.fileName = fileName!
+            addEffectsViewController.fileName = audioFile!.name
         }
     }
     
+    @IBAction func amazonLinkBtnAction(_ sender: Any) {
+    
+        let amazonURL = URL(string: WEB_URLS.AMAZON_LINK)!
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(amazonURL, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(amazonURL)
+        }
+    }
 }
 
