@@ -48,7 +48,7 @@ class DocumentsDirectoryService {
                 if let searchPathURL = getSearchFilePathURLForFileName(fileName){
                     let audioFile = AudioFile.init(name: fileName)
                     audioFile.fileURL = searchPathURL
-                    audioFile.duration = getDurationOfAudioFileWithURL(searchPathURL)
+                    audioFile.duration = AudioProcessing().getDurationOfAudioFileWithURL(searchPathURL)
                     audioFiles.append(audioFile)
                 }
             }
@@ -60,24 +60,6 @@ class DocumentsDirectoryService {
             }
         }
         return nil
-    }
-    
-    func getDurationOfAudioFileWithURL(_ url: URL) -> String {
-        
-        let asset = AVURLAsset.init(url: url)
-        let audioDuration = asset.duration
-        return durationStringFromCMTime(audioDuration, withFormat: "HH:mm:ss")
-    }
-    
-    func durationStringFromCMTime(_ cmTime: CMTime, withFormat format: String) -> String {
-        
-        let seconds = CMTimeGetSeconds(cmTime)
-        let date = Date.init(timeIntervalSinceNow: seconds)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
-        
-        return dateFormatter.string(from: date)
     }
     
     func deleteFileOfFileName(_ fileName: String) -> Bool {
