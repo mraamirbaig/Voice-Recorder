@@ -15,11 +15,22 @@ class TimerView: UIView {
     
     var startTime = TimeInterval()
     var timer:Timer = Timer()
+ 
+    private let TIMER_VIEW_NIB_NAME = "TimerView"
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder);
-
+        
+        let bundle = Bundle.init(for: TimerView.self)
+        
+        let viewToAdd = bundle.loadNibNamed(TIMER_VIEW_NIB_NAME, owner: self, options: nil)?[0] as! UIView
+        addSubview(viewToAdd)
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|", options: NSLayoutFormatOptions.alignAllLeft, metrics: nil, views: ["view": backgroundView]))
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|", options: NSLayoutFormatOptions.alignAllLeft, metrics: nil, views: ["view": backgroundView])) 
     }
+
     
     func startTimer() {
         

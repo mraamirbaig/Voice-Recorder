@@ -60,10 +60,10 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GTF-b3-Pwd" customClass="TimerView" customModule="Voice_Recorder" customModuleProvider="target">
-                                <rect key="frame" x="118" y="147" width="138" height="32"/>
+                                <rect key="frame" x="97.5" y="147" width="179" height="32"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="138" id="P58-P4-4UT"/>
+                                    <constraint firstAttribute="width" constant="179" id="P58-P4-4UT"/>
                                     <constraint firstAttribute="height" constant="32" id="bHD-YP-zMw"/>
                                 </constraints>
                             </view>
@@ -99,7 +99,7 @@
                         <outlet property="addEffectsNavBarItem" destination="FZo-Uj-EgE" id="4ve-JE-fQj"/>
                         <outlet property="playBtn" destination="wGd-Kv-t5g" id="M6I-ju-eIt"/>
                         <outlet property="recordAndStopBtn" destination="9tz-qE-yft" id="60g-gn-G75"/>
-                        <outlet property="timerView" destination="GTF-b3-Pwd" id="tFV-FK-eVy"/>
+                        <outlet property="timerView" destination="GTF-b3-Pwd" id="uhF-SQ-OCp"/>
                         <segue destination="Keh-qG-rfc" kind="show" identifier="RecordingsListSegue" id="6xI-b4-T6H"/>
                     </connections>
                 </viewController>
