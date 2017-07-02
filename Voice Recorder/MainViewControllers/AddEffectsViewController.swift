@@ -325,7 +325,7 @@ class AddEffectsViewController: UIViewController {
                 
                 let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
                                                                                                                                       AVEncoderBitRateKey: 16,                                                                         AVNumberOfChannelsKey: 2,                                                    AVSampleRateKey: 44100.0])
-                
+    
                 let length = self.audioFile!.length
                 audioEngine!.mainMixerNode.installTap(onBus: 0, bufferSize: AVAudioFrameCount(audioFile!.length), format: self.audioEngine!.mainMixerNode.outputFormat(forBus: 0)) {
                     (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
