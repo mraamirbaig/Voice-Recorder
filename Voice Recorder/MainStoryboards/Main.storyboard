@@ -59,6 +59,14 @@
                                     <action selector="resetAllNavItemAction:" destination="pHc-d7-cbi" eventType="touchUpInside" id="Pto-Jw-Z64"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GTF-b3-Pwd" customClass="TimerView" customModule="Voice_Recorder" customModuleProvider="target">
+                                <rect key="frame" x="118" y="147" width="138" height="32"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="138" id="P58-P4-4UT"/>
+                                    <constraint firstAttribute="height" constant="32" id="bHD-YP-zMw"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -66,6 +74,8 @@
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="centerX" secondItem="9tz-qE-yft" secondAttribute="centerX" id="1TU-bI-NQ7"/>
                             <constraint firstItem="crX-t5-tUu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="5gz-ZT-rra"/>
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="top" secondItem="9tz-qE-yft" secondAttribute="bottom" constant="24" id="KhL-tJ-0KR"/>
+                            <constraint firstItem="9tz-qE-yft" firstAttribute="top" secondItem="GTF-b3-Pwd" secondAttribute="bottom" constant="8" id="LOD-rr-Phj"/>
+                            <constraint firstItem="GTF-b3-Pwd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Tno-sj-DyM"/>
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-70" id="fLW-Hu-3gv"/>
                             <constraint firstAttribute="trailing" secondItem="crX-t5-tUu" secondAttribute="trailing" constant="8" id="iOW-0P-CNA"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="crX-t5-tUu" secondAttribute="bottom" constant="20" id="nIl-eK-xGE"/>
@@ -89,6 +99,7 @@
                         <outlet property="addEffectsNavBarItem" destination="FZo-Uj-EgE" id="4ve-JE-fQj"/>
                         <outlet property="playBtn" destination="wGd-Kv-t5g" id="M6I-ju-eIt"/>
                         <outlet property="recordAndStopBtn" destination="9tz-qE-yft" id="60g-gn-G75"/>
+                        <outlet property="timerView" destination="GTF-b3-Pwd" id="8JU-Pd-rUc"/>
                         <segue destination="Keh-qG-rfc" kind="show" identifier="RecordingsListSegue" id="6xI-b4-T6H"/>
                     </connections>
                 </viewController>

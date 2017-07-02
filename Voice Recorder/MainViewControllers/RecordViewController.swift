@@ -23,6 +23,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     
     
     @IBOutlet weak var addEffectsNavBarItem: UIBarButtonItem!
+    @IBOutlet weak var timerView: TimerView!
     @IBOutlet weak var recordAndStopBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     
@@ -86,6 +87,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     private func startRecording() {
         
         soundRecorder.record()
+        timerView.startTimer()
         recordAndStopBtn.tag = 1
         recordAndStopBtn.setBackgroundImage(UIImage.init(named: "Stop"), for: .normal)
         
@@ -98,6 +100,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
             addEffectsNavBarItem.isEnabled = true
             if soundRecorder.isRecording == true {
                 soundRecorder.stop()
+                timerView.stopTimer()
             }
         }
     }
