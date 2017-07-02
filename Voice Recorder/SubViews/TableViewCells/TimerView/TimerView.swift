@@ -10,11 +10,16 @@ import UIKit
 
 class TimerView: UIView {
 
-    @IBOutlet var timerLabel: UILabel!
+    @IBOutlet private weak var backgroundView: UIView!
+    @IBOutlet private weak var timerLabel: UILabel!
     
     var startTime = TimeInterval()
     var timer:Timer = Timer()
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder);
 
+    }
     
     func startTimer() {
         

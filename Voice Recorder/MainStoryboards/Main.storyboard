@@ -99,7 +99,7 @@
                         <outlet property="addEffectsNavBarItem" destination="FZo-Uj-EgE" id="4ve-JE-fQj"/>
                         <outlet property="playBtn" destination="wGd-Kv-t5g" id="M6I-ju-eIt"/>
                         <outlet property="recordAndStopBtn" destination="9tz-qE-yft" id="60g-gn-G75"/>
-                        <outlet property="timerView" destination="GTF-b3-Pwd" id="8JU-Pd-rUc"/>
+                        <outlet property="timerView" destination="GTF-b3-Pwd" id="tFV-FK-eVy"/>
                         <segue destination="Keh-qG-rfc" kind="show" identifier="RecordingsListSegue" id="6xI-b4-T6H"/>
                     </connections>
                 </viewController>
