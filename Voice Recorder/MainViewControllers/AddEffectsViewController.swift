@@ -40,7 +40,7 @@ class AddEffectsViewController: UIViewController {
     var hallPlayerNodeVolume: Float!
     var smallRoomPlayerNodeVolume: Float!
     
-    var showAlertService: ShowAlertService!
+    var showAlertService: ShowAlertAndLoaderService!
     let documentsDirectoryService = DocumentsDirectoryService()
     
     static func getInstanceForFileName(_ fileName: String) -> AddEffectsViewController {
@@ -54,7 +54,7 @@ class AddEffectsViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        showAlertService = ShowAlertService.init(onViewController: self)
+        showAlertService = ShowAlertAndLoaderService.init(onViewController: self)
         
         if fileName != nil{
             resetAllEffects()
@@ -320,6 +320,7 @@ class AddEffectsViewController: UIViewController {
             }
             
             if reInitializeAudioEngine() {
+                showAlertService.addLoader()
                 playAllAudioPlayerNodes()
                 
                 let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
@@ -351,6 +352,7 @@ class AddEffectsViewController: UIViewController {
                         DispatchQueue.main.async {
                             self.stopAllAudioPlayerNodes()
                             self.audioEngine!.stop()
+                            self.showAlertService.removeLoaderView()
                             self.navigationController?.popViewController(animated: true)
                         }
                     }

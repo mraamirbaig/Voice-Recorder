@@ -22,7 +22,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     var filteredRecordingAudioFiles = [AudioFile]()
     
     let documentsDirectoryService = DocumentsDirectoryService()
-    var showAlertService: ShowAlertService!
+    var showAlertService: ShowAlertAndLoaderService!
     
     var searchActive : Bool = false
     var indexPathOfPlayingCell: IndexPath?
@@ -34,7 +34,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         
         recordingsListTableView.register(UINib.init(nibName: "RecordingListCell", bundle: Bundle.init(for: RecordingListCell.self)), forCellReuseIdentifier: "RecordingListCellIdentifier")
         
-        showAlertService = ShowAlertService.init(onViewController: self)
+        showAlertService = ShowAlertAndLoaderService.init(onViewController: self)
         if let allRecordingAudioFiles = getAllRecordingAudioFiles() {
             self.allRecordingAudioFiles = allRecordingAudioFiles
         }

@@ -9,13 +9,59 @@
 import Foundation
 import UIKit
 
-class ShowAlertService {
+class ShowAlertAndLoaderService {
     
     var loaderView: UIView?
     var onViewController: UIViewController!
     
     public init(onViewController: UIViewController) {
         self.onViewController = onViewController
+    }
+    
+    public func addLoader() {
+        if let viewController = onViewController {
+            let backgroundFrameSize = CGSize.init(width: 80.0, height: 80.0)
+            loaderView = getLoaderBackgroundView(size: backgroundFrameSize)
+            let activityIndicator = getActivityIndicator(style: .whiteLarge)
+            
+            loaderView!.addSubview(activityIndicator)
+            activityIndicator.center = loaderView!.center
+            
+            viewController.view.addSubview(loaderView!)
+            setupConstraints(subview: loaderView!, parentView: viewController.view, size: CGSize.init(width: 80.0, height: 80.0))
+        }
+    }
+    
+    private func getLoaderBackgroundView(size: CGSize) -> UIView {
+        let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        backgroundView.frame.size = CGSize.init(width: size.width, height: size.height)
+        backgroundView.backgroundColor = UIColor.init(red: 68 / 225, green: 68 / 225, blue: 68 / 225, alpha: 0.7)
+        backgroundView.clipsToBounds = true
+        backgroundView.layer.cornerRadius = 10
+        return backgroundView
+    }
+    
+    private func getActivityIndicator(style: UIActivityIndicatorViewStyle) -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = style
+        activityIndicator.startAnimating()
+        return activityIndicator
+    }
+    
+    func setupConstraints(subview: UIView, parentView: UIView, size: CGSize) {
+        let centerX = NSLayoutConstraint(item: subview, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: parentView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
+        let centerY = NSLayoutConstraint(item: subview, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: parentView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
+        let width = NSLayoutConstraint(item: subview, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: subview.frame.size.width)
+        let height = NSLayoutConstraint(item: subview, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: subview.frame.size.height)
+        subview.translatesAutoresizingMaskIntoConstraints = false
+        parentView.addConstraints([centerX, centerY, width, height])
+    }
+    
+    public func removeLoaderView() {
+        if loaderView != nil {
+            loaderView!.removeFromSuperview()
+            loaderView = nil
+        }
     }
     
     //Alerts

@@ -19,7 +19,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     var audioIsPlaying = false
     
     let documentsDirectoryService = DocumentsDirectoryService()
-    var showAlertService: ShowAlertService!
+    var showAlertService: ShowAlertAndLoaderService!
     
     
     @IBOutlet weak var addEffectsNavBarItem: UIBarButtonItem!
@@ -31,7 +31,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        showAlertService = ShowAlertService.init(onViewController: self)
+        showAlertService = ShowAlertAndLoaderService.init(onViewController: self)
     }
     
     @IBAction func recordAndStopBtnAction(_ sender: Any) {
