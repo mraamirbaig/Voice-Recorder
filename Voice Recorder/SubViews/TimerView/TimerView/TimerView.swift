@@ -62,8 +62,8 @@ class TimerView: UIView {
 //
 //        print("\(strMinutes):\(strSeconds):\(strFraction)")
         
-        print("timer..\(DateTimeService().getDurationStringFromTimeInterval(elapsedTime))")
-        //timerLabel.text = "\(strMinutes):\(strSeconds):\(strFraction)"
+        //print("timer..\(DateTimeService().getDurationStringFromTimeInterval(elapsedTime))")
+        timerLabel.text = DateTimeService().getDurationStringFromTimeInterval(elapsedTime)
     }
     
 }
