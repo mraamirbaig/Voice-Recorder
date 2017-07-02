@@ -32,6 +32,34 @@ class ShowAlertAndLoaderService {
         }
     }
     
+    public func addLoaderViewWithTitle(title: String) {
+        
+        
+        if let viewController = onViewController {
+            let backgroundFrameSize = CGSize.init(width: 160.0, height: 46.0)
+            loaderView = getLoaderBackgroundView(size: backgroundFrameSize)
+            let activityIndicator = getActivityIndicator(style: .white)
+            
+            loaderView!.addSubview(activityIndicator)
+            activityIndicator.center = CGPoint.init(x: 25, y: 23)
+            let strLabel = getLabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46), text: title)
+            loaderView!.addSubview(strLabel)
+            
+            viewController.view.addSubview(loaderView!)
+            setupConstraints(subview: loaderView!, parentView: viewController.view, size: CGSize.init(width: 80.0, height: 80.0))
+        }
+    }
+    
+    private func getLabel(frame: CGRect, text: String) -> UILabel {
+        
+        let strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
+        strLabel.text = text
+        strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+        strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+        
+        return strLabel
+    }
+    
     private func getLoaderBackgroundView(size: CGSize) -> UIView {
         let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         backgroundView.frame.size = CGSize.init(width: size.width, height: size.height)

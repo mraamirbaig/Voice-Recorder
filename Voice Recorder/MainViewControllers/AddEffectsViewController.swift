@@ -320,7 +320,7 @@ class AddEffectsViewController: UIViewController {
             }
             
             if reInitializeAudioEngine() {
-                showAlertService.addLoader()
+                showAlertService.addLoaderViewWithTitle(title: "Saving...")
                 playAllAudioPlayerNodes()
                 
                 let newAudio = try! AVAudioFile(forWriting: documentsDirectoryService.createFileURLWithFileName(fileName), settings: [AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
