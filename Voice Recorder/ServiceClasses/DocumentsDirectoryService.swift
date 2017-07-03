@@ -62,7 +62,12 @@ class DocumentsDirectoryService {
         return nil
     }
     
-    func deleteFileOfFileName(_ fileName: String) -> Bool {
+    func deleteAudioFile(_ audioFile: AudioFile) -> Bool {
+        
+        return deleteFileOfFileName(audioFile.name)
+    }
+    
+    private func deleteFileOfFileName(_ fileName: String) -> Bool {
         
         print("Deleting fileof Filename: \(fileName)")
         if let searchFilePathURL = getSearchFilePathURLForFileName(fileName) {
@@ -86,6 +91,11 @@ class DocumentsDirectoryService {
             return URL(fileURLWithPath: searchPath).appendingPathComponent(fileName)
         }
         return nil
+    }
+    
+    func getSearchFilePathURLForAudioFile(_ audioFile: AudioFile) -> URL? {
+        
+        return getSearchFilePathURLForFileName(audioFile.name)
     }
     
     func getFileOfFileName(_ fileName: String) {

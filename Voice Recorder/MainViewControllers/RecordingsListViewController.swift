@@ -112,19 +112,20 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         stopPlayer()
-//        if let allRecordingAudioFiles = getAllRecordingAudioFiles() {
-//            self.allRecordingAudioFiles = allRecordingAudioFiles
-//        }
-//        
-//        if searchText.characters.count > 0 {
-//            filteredRecordingsListNames = allRecordingAudioFiles.filter({ (recordingName) -> Bool in
-//                let tmp: NSString = recordingName as NSString
-//                let range = tmp.range(of: searchText, options: .caseInsensitive)
-//                return range.location != NSNotFound
-//            })
-//        }else {
-//            filteredRecordingsListNames = recordingsListNames
-//        }
+        if let allRecordingAudioFiles = getAllRecordingAudioFiles() {
+            self.allRecordingAudioFiles = allRecordingAudioFiles
+        }
+        
+        if searchText.characters.count > 0 {
+            filteredRecordingAudioFiles = allRecordingAudioFiles.filter({ (audioFile) -> Bool in
+                
+                let tmp: NSString = audioFile.name as NSString
+                let range = tmp.range(of: searchText, options: .caseInsensitive)
+                return range.location != NSNotFound
+            })
+        }else {
+            filteredRecordingAudioFiles = allRecordingAudioFiles
+        }
         
         self.recordingsListTableView.reloadData()
     }
@@ -200,54 +201,54 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
         return true
     }
     
-//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-//        
-//        let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
-//            
-//            let recordingFileNameToBeDeleted: String!
-//            if self.searchActive == true {
-//                recordingFileNameToBeDeleted = self.filteredRecordingsListNames[indexPath.row]
-//            }else{
-//                recordingFileNameToBeDeleted = self.recordingsListNames[indexPath.row]
-//            }
-//            
-//            if self.deleteFileOfFileName(recordingFileNameToBeDeleted) {
-//                if self.searchActive == true {
-//                    self.filteredRecordingsListNames.remove(at: indexPath.row)
-//                }else{
-//                    self.recordingsListNames.remove(at: indexPath.row)
-//                }
-//                self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
-//                self.enableDisableEditBtn()
-//            }
-//        }
-//        
-//        let shareRowAction = UITableViewRowAction.init(style: .normal, title: "Share") { (rowAction, indexPath) in
-//            
-//            let recordingFileNameToBeShared: String!
-//            if self.searchActive == true {
-//                recordingFileNameToBeShared = self.filteredRecordingsListNames[indexPath.row]
-//            }else{
-//                recordingFileNameToBeShared = self.recordingsListNames[indexPath.row]
-//            }
-//            
-//            self.shareFileOfFileName(recordingFileNameToBeShared)
-//        }
-//        return [deleteRowAction,shareRowAction]
-//    }
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteRowAction = UITableViewRowAction.init(style: .destructive, title: "Delete") { (rowAction, indexPath) in
+            
+            let audioFileToBeDeleted: AudioFile!
+            if self.searchActive == true {
+                audioFileToBeDeleted = self.filteredRecordingAudioFiles[indexPath.row]
+            }else{
+                audioFileToBeDeleted = self.filteredRecordingAudioFiles[indexPath.row]
+            }
+            
+            if self.deleteAudioFile(audioFileToBeDeleted) {
+                if self.searchActive == true {
+                    self.filteredRecordingAudioFiles.remove(at: indexPath.row)
+                }else{
+                    self.filteredRecordingAudioFiles.remove(at: indexPath.row)
+                }
+                self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
+                self.enableDisableEditBtn()
+            }
+        }
+
+        let shareRowAction = UITableViewRowAction.init(style: .normal, title: "Share") { (rowAction, indexPath) in
+            
+            let audioFileToBeShared: AudioFile!
+            if self.searchActive == true {
+                audioFileToBeShared = self.filteredRecordingAudioFiles[indexPath.row]
+            }else{
+                audioFileToBeShared = self.filteredRecordingAudioFiles[indexPath.row]
+            }
+            
+            self.shareAudioFile(audioFileToBeShared)
+        }
+        return [deleteRowAction,shareRowAction]
+    }
     
-    func deleteFileOfFileName(_ fileName: String) -> Bool {
+    private func deleteAudioFile(_ audioFile: AudioFile) -> Bool {
         
         stopPlayer()
-        if self.documentsDirectoryService.deleteFileOfFileName (fileName) {
+        if self.documentsDirectoryService.deleteAudioFile(audioFile) {
             return true
         }
         return false
     }
     
-    func shareFileOfFileName(_ fileName: String) {
+    func shareAudioFile(_ audioFile: AudioFile) {
         
-        if let fileURL = self.documentsDirectoryService.getSearchFilePathURLForFileName(fileName) {
+        if let fileURL = self.documentsDirectoryService.getSearchFilePathURLForAudioFile(audioFile) {
             let activityViewController : UIActivityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }else{
