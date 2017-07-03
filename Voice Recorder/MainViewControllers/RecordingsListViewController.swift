@@ -209,14 +209,14 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
             if self.searchActive == true {
                 audioFileToBeDeleted = self.filteredRecordingAudioFiles[indexPath.row]
             }else{
-                audioFileToBeDeleted = self.filteredRecordingAudioFiles[indexPath.row]
+                audioFileToBeDeleted = self.allRecordingAudioFiles[indexPath.row]
             }
             
             if self.deleteAudioFile(audioFileToBeDeleted) {
                 if self.searchActive == true {
                     self.filteredRecordingAudioFiles.remove(at: indexPath.row)
                 }else{
-                    self.filteredRecordingAudioFiles.remove(at: indexPath.row)
+                    self.allRecordingAudioFiles.remove(at: indexPath.row)
                 }
                 self.recordingsListTableView.deleteRows(at: [indexPath], with: .automatic)
                 self.enableDisableEditBtn()
@@ -229,7 +229,7 @@ class RecordingsListViewController: UIViewController,UITableViewDelegate, UITabl
             if self.searchActive == true {
                 audioFileToBeShared = self.filteredRecordingAudioFiles[indexPath.row]
             }else{
-                audioFileToBeShared = self.filteredRecordingAudioFiles[indexPath.row]
+                audioFileToBeShared = self.allRecordingAudioFiles[indexPath.row]
             }
             
             self.shareAudioFile(audioFileToBeShared)
