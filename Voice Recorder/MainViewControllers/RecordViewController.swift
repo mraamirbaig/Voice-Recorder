@@ -23,6 +23,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     
     
     @IBOutlet weak var addEffectsNavBarItem: UIBarButtonItem!
+    @IBOutlet weak var timerBgView: UIView!
     @IBOutlet weak var timerView: TimerView!
     @IBOutlet weak var recordAndStopBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
@@ -32,6 +33,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         // Do any additional setup after loading the view, typically from a nib.
         
         showAlertService = ShowAlertAndLoaderService.init(onViewController: self)
+        self.buildVoiceCirlce()
     }
     
     @IBAction func recordAndStopBtnAction(_ sender: Any) {
@@ -216,7 +218,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         self.performSegue(withIdentifier: "RecordingsListSegue", sender: nil)
     }
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let addEffectsViewController = segue.destination as? AddEffectsViewController {
@@ -232,6 +233,26 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
         } else {
             UIApplication.shared.openURL(amazonURL)
         }
+    }
+    
+    //MARK: Build Wave Cricle
+    var WaveAnimationView:UIView!
+    func buildVoiceCirlce(){
+        
+        let size = CGSize(width: 400, height: 400)
+        
+        let newPoint = CGPoint(x:self.timerBgView.frame.size.width / 2 - 200 , y: self.timerBgView.frame.size.height / 2 - 200)
+        WaveAnimationView = UIView(frame: CGRect(origin:newPoint , size: size))
+        WaveAnimationView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        WaveAnimationView.layer.cornerRadius = 200
+        WaveAnimationView.backgroundColor = UIColor.clear
+        WaveAnimationView.layer.borderColor = UIColor.black.cgColor
+        WaveAnimationView.layer.borderWidth = 6.0
+        self.timerBgView.addSubview(WaveAnimationView)
+        
+        self.WaveAnimationView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        
+        
     }
 }
 

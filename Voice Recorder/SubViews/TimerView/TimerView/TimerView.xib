@@ -24,10 +24,9 @@
                     <rect key="frame" x="0.0" y="0.0" width="179" height="32"/>
                     <fontDescription key="fontDescription" type="system" pointSize="27"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="2yb-sw-hgZ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="SrM-Ky-fFd"/>
                 <constraint firstItem="2yb-sw-hgZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="mmq-qH-jWi"/>
@@ -35,7 +34,7 @@
                 <constraint firstAttribute="bottom" secondItem="2yb-sw-hgZ" secondAttribute="bottom" id="xei-xg-SE4"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="154" y="-304"/>
+            <point key="canvasLocation" x="-18" y="-288"/>
         </view>
     </objects>
 </document>

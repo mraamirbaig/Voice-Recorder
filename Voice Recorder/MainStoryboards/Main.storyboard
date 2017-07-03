@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,7 +25,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9tz-qE-yft">
-                                <rect key="frame" x="143.5" y="187.5" width="88" height="88"/>
+                                <rect key="frame" x="143.5" y="307.5" width="88" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="88" id="lBA-7k-uiK"/>
                                     <constraint firstAttribute="width" constant="88" id="omH-7R-NWf"/>
@@ -35,7 +36,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wGd-Kv-t5g">
-                                <rect key="frame" x="143" y="299.5" width="88" height="88"/>
+                                <rect key="frame" x="143" y="419.5" width="88" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="88" id="7q7-gc-cod"/>
                                     <constraint firstAttribute="height" constant="88" id="kUR-gx-zJt"/>
@@ -59,26 +60,38 @@
                                     <action selector="resetAllNavItemAction:" destination="pHc-d7-cbi" eventType="touchUpInside" id="Pto-Jw-Z64"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GTF-b3-Pwd" customClass="TimerView" customModule="Voice_Recorder" customModuleProvider="target">
-                                <rect key="frame" x="97.5" y="147" width="179" height="32"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WdN-nO-MCa">
+                                <rect key="frame" x="100" y="100.5" width="175" height="175"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GTF-b3-Pwd" customClass="TimerView" customModule="Voice_Recorder" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="67.5" width="175" height="40"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="YFY-lw-yYW"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="179" id="P58-P4-4UT"/>
-                                    <constraint firstAttribute="height" constant="32" id="bHD-YP-zMw"/>
+                                    <constraint firstAttribute="width" secondItem="WdN-nO-MCa" secondAttribute="height" multiplier="1:1" id="5yk-dj-a28"/>
+                                    <constraint firstAttribute="width" constant="175" id="Ag6-QG-GA3"/>
+                                    <constraint firstItem="GTF-b3-Pwd" firstAttribute="centerY" secondItem="WdN-nO-MCa" secondAttribute="centerY" id="JPp-lF-tbq"/>
+                                    <constraint firstAttribute="trailing" secondItem="GTF-b3-Pwd" secondAttribute="trailing" id="j2E-L7-2pB"/>
+                                    <constraint firstItem="GTF-b3-Pwd" firstAttribute="leading" secondItem="WdN-nO-MCa" secondAttribute="leading" id="sdr-18-lqk"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="08e-nM-UWT"/>
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="centerX" secondItem="9tz-qE-yft" secondAttribute="centerX" id="1TU-bI-NQ7"/>
                             <constraint firstItem="crX-t5-tUu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="5gz-ZT-rra"/>
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="top" secondItem="9tz-qE-yft" secondAttribute="bottom" constant="24" id="KhL-tJ-0KR"/>
-                            <constraint firstItem="9tz-qE-yft" firstAttribute="top" secondItem="GTF-b3-Pwd" secondAttribute="bottom" constant="8" id="LOD-rr-Phj"/>
-                            <constraint firstItem="GTF-b3-Pwd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Tno-sj-DyM"/>
-                            <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-70" id="fLW-Hu-3gv"/>
+                            <constraint firstItem="9tz-qE-yft" firstAttribute="top" secondItem="WdN-nO-MCa" secondAttribute="bottom" constant="32" id="Tde-s4-uJE"/>
+                            <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="50" id="fLW-Hu-3gv"/>
                             <constraint firstAttribute="trailing" secondItem="crX-t5-tUu" secondAttribute="trailing" constant="8" id="iOW-0P-CNA"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="crX-t5-tUu" secondAttribute="bottom" constant="20" id="nIl-eK-xGE"/>
+                            <constraint firstItem="WdN-nO-MCa" firstAttribute="centerX" secondItem="9tz-qE-yft" secondAttribute="centerX" id="vrr-Oe-NBY"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -99,6 +112,7 @@
                         <outlet property="addEffectsNavBarItem" destination="FZo-Uj-EgE" id="4ve-JE-fQj"/>
                         <outlet property="playBtn" destination="wGd-Kv-t5g" id="M6I-ju-eIt"/>
                         <outlet property="recordAndStopBtn" destination="9tz-qE-yft" id="60g-gn-G75"/>
+                        <outlet property="timerBgView" destination="WdN-nO-MCa" id="O5U-EM-HRA"/>
                         <outlet property="timerView" destination="GTF-b3-Pwd" id="uhF-SQ-OCp"/>
                         <segue destination="Keh-qG-rfc" kind="show" identifier="RecordingsListSegue" id="6xI-b4-T6H"/>
                     </connections>
