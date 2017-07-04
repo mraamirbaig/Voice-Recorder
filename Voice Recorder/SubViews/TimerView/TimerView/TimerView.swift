@@ -46,12 +46,17 @@ class TimerView: UIView {
         timer.invalidate()
     }
     
-    func updateTime() {
+    @objc private func updateTime() {
         let currentTime = Date.timeIntervalSinceReferenceDate
         
         //Find the difference between current time and start time.
         let elapsedTime: TimeInterval = currentTime - startTime
  
+        timerLabel.text = DateTimeService().getDurationStringFromTimeInterval(elapsedTime)
+    }
+    
+    func updateTimeWithTimeInterVal(elapsedTime: TimeInterval) {
+        
         timerLabel.text = DateTimeService().getDurationStringFromTimeInterval(elapsedTime)
     }
     

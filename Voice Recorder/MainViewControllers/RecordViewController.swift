@@ -11,6 +11,10 @@ import AVFoundation
 
 class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
+    ////
+    var meter: Timer?
+    
+    ////
     let audioSession = AVAudioSession.sharedInstance()
     var soundRecorder : AVAudioRecorder!
     var soundPlayer : AVAudioPlayer!
@@ -65,6 +69,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
                 try soundRecorder = AVAudioRecorder.init(url: documentsDirectoryService.createFileURLWithFileName(fileName), settings: recordSettings)
                 
                 soundRecorder.delegate = self
+                soundRecorder.isMeteringEnabled = true
                 soundRecorder.prepareToRecord()
                 return true
             } catch {
@@ -87,9 +92,32 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     }
     
     private func startRecording() {
+ 
+        var recorderApc0:Float = 0
+        var recorderPeak0:Float = 0
         
         soundRecorder.record()
-        timerView.startTimer()
+        
+        meter = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer: Timer) in
+            
+            if let recorder = self.soundRecorder {
+                recorder.updateMeters()
+                recorderApc0 = recorder.averagePower(forChannel: 0)
+                recorderPeak0 = recorder.peakPower(forChannel: 0)
+                
+                self.timerView.updateTimeWithTimeInterVal(elapsedTime: recorder.currentTime)
+                
+                let percent = (Double(recorderApc0) + 160)/160
+                print(percent)
+                let final = CGFloat(percent)
+                
+                UIView.animate(withDuration: 0.15, animations: {
+                    self.WaveAnimationView.transform = CGAffineTransform(scaleX: final, y: final)
+                })
+            }
+        })
+        
+        //timerView.startTimer()
         recordAndStopBtn.tag = 1
         recordAndStopBtn.setBackgroundImage(UIImage.init(named: "Stop"), for: .normal)
         
@@ -102,7 +130,11 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
             addEffectsNavBarItem.isEnabled = true
             if soundRecorder.isRecording == true {
                 soundRecorder.stop()
-                timerView.stopTimer()
+                //timerView.stopTimer()
+                UIView.animate(withDuration: 0.3, animations: { 
+                    self.WaveAnimationView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+                })
+                meter?.invalidate()
             }
         }
     }
@@ -239,12 +271,12 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPl
     var WaveAnimationView:UIView!
     func buildVoiceCirlce(){
         
-        let size = CGSize(width: 400, height: 400)
+        let size = CGSize(width: 320, height: 320)
         
-        let newPoint = CGPoint(x:self.timerBgView.frame.size.width / 2 - 200 , y: self.timerBgView.frame.size.height / 2 - 200)
+        let newPoint = CGPoint(x:self.timerBgView.frame.size.width / 2 - 160 , y: self.timerBgView.frame.size.height / 2 - 160)
         WaveAnimationView = UIView(frame: CGRect(origin:newPoint , size: size))
         WaveAnimationView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        WaveAnimationView.layer.cornerRadius = 200
+        WaveAnimationView.layer.cornerRadius = 160
         WaveAnimationView.backgroundColor = UIColor.clear
         WaveAnimationView.layer.borderColor = UIColor.black.cgColor
         WaveAnimationView.layer.borderWidth = 6.0

@@ -14,15 +14,6 @@ class DateTimeService {
     
     func getDurationStringFromTimeInterval(_ timeInterval: TimeInterval) -> String {
         
-        //        let seconds = Int(CMTimeGetSeconds(cmTime))
-        //
-        //        let intHours = timeText(from: seconds / 3600)
-        //        let intMinutes = timeText(from: (seconds % 3600) / 60)
-        //        let intSeconds = timeText(from: (seconds % 3600) % 60)
-        //        let intMiliSeconds = timeText(from: (seconds % 1) * 100)
-        //
-        //        return "\(intHours):\(intMinutes):\(intSeconds):\(intMiliSeconds)"
-        
         let timeInteger = NSInteger(timeInterval)
         
         let ms = Int(timeInterval.truncatingRemainder(dividingBy: 1) * 100)

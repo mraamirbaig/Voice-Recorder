@@ -61,11 +61,10 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WdN-nO-MCa">
-                                <rect key="frame" x="100" y="100.5" width="175" height="175"/>
+                                <rect key="frame" x="107.5" y="91.5" width="160" height="160"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GTF-b3-Pwd" customClass="TimerView" customModule="Voice_Recorder" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="67.5" width="175" height="40"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <rect key="frame" x="0.0" y="60" width="160" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="YFY-lw-yYW"/>
                                         </constraints>
@@ -74,7 +73,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="WdN-nO-MCa" secondAttribute="height" multiplier="1:1" id="5yk-dj-a28"/>
-                                    <constraint firstAttribute="width" constant="175" id="Ag6-QG-GA3"/>
+                                    <constraint firstAttribute="width" constant="160" id="Ag6-QG-GA3"/>
                                     <constraint firstItem="GTF-b3-Pwd" firstAttribute="centerY" secondItem="WdN-nO-MCa" secondAttribute="centerY" id="JPp-lF-tbq"/>
                                     <constraint firstAttribute="trailing" secondItem="GTF-b3-Pwd" secondAttribute="trailing" id="j2E-L7-2pB"/>
                                     <constraint firstItem="GTF-b3-Pwd" firstAttribute="leading" secondItem="WdN-nO-MCa" secondAttribute="leading" id="sdr-18-lqk"/>
@@ -87,7 +86,7 @@
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="centerX" secondItem="9tz-qE-yft" secondAttribute="centerX" id="1TU-bI-NQ7"/>
                             <constraint firstItem="crX-t5-tUu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="5gz-ZT-rra"/>
                             <constraint firstItem="wGd-Kv-t5g" firstAttribute="top" secondItem="9tz-qE-yft" secondAttribute="bottom" constant="24" id="KhL-tJ-0KR"/>
-                            <constraint firstItem="9tz-qE-yft" firstAttribute="top" secondItem="WdN-nO-MCa" secondAttribute="bottom" constant="32" id="Tde-s4-uJE"/>
+                            <constraint firstItem="9tz-qE-yft" firstAttribute="top" secondItem="WdN-nO-MCa" secondAttribute="bottom" constant="56" id="Tde-s4-uJE"/>
                             <constraint firstItem="9tz-qE-yft" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="50" id="fLW-Hu-3gv"/>
                             <constraint firstAttribute="trailing" secondItem="crX-t5-tUu" secondAttribute="trailing" constant="8" id="iOW-0P-CNA"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="crX-t5-tUu" secondAttribute="bottom" constant="20" id="nIl-eK-xGE"/>
